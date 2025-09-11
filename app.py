@@ -2,6 +2,21 @@ from flask import Flask, url_for, request, redirect
 import datetime
 app = Flask(__name__)
 
+@app.errorhandler(404)
+def not_found(err):
+    osh = url_for("static", filename="404.jpeg") 
+    return '''
+<!doctype html>
+<html>
+    <body>
+       <h1>Ошибка 404 - Страница не найдена</h1>
+       <p>К сожалению, такой страницы не существует</p>
+       <img src="''' + osh + '''">
+       <br>
+       <a href="/web">Вернуться на главную</a>
+    </body>
+</html>
+''', 404
 
 @app.route("/web")
 def web():
