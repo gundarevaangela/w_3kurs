@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, url_for
 app = Flask(__name__)
 
 
@@ -25,3 +25,15 @@ def author():
                     <a href="/web">web</a>
                 </body>
             </html>""" 
+@app.route('/image')
+def image():
+      path = url_for("static", filename="cat.jpg")
+      return '''
+<!doctype html>
+<html>
+    <body>
+       <h1>Кот</h1>
+       <img src="''' + path + '''">
+    </body>
+</html>
+'''
