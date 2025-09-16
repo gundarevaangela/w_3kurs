@@ -190,17 +190,7 @@ def lab1():
 </html>
 '''
 
-def get_navigation_links():
-    return '''
-    <hr>
-    <h3>Навигация:</h3>
-    <a href="/lab1/web">Главная</a> |
-    <a href="/lab1/author">Автор</a> |
-    <a href="/lab1/image">Изображение</a> |
-    <a href="/lab1/counter">Счетчик</a> |
-    <a href="/lab1/info">Инфо</a> |
-   
-    '''
+
 
 @app.route("/lab1/error/400")
 def error_400():
@@ -253,7 +243,6 @@ def web():
            <body> 
                <h1>web-сервер на flask</h1> 
                <a href="/lab1/author">author</a>
-               """ + get_navigation_links() + """
            </body> 
         </html>""", 200, {
              'X-Server': 'sample',
@@ -272,7 +261,6 @@ def author():
                     <p> Группа: """ + group + """</p>
                     <p> Факультет: """ + faculty + """</p>
                     <a href="/lab1/web">web</a>
-                    """ + get_navigation_links() + """
                 </body>
             </html>""" 
 
@@ -289,10 +277,12 @@ def image():
     <body>
        <h1>Кот</h1>
        <img src="''' + path + '''">
-       ''' + get_navigation_links() + '''
     </body>
-</html>
-'''
+</html>''', 200, {
+        'Content-Language': 'ru',
+        'X-Author': 'Gundareva A.A.',    
+        'X-Framework': 'Flask'}
+
 
 count = 0
 @app.route('/lab1/counter')
@@ -314,7 +304,6 @@ def counter():
        Ваш IP-адрес: ''' + str(client_ip) + '''<br> 
        <hr>
        <a href="/lab1/reset_counter">Очистить счетчик</a>
-       ''' + get_navigation_links() + '''
     </body>
 </html>
 '''
@@ -330,7 +319,6 @@ def reset_counter():
        Счетчик очищен!
        <hr>
        <a href="/lab1/counter">Вернуться к счетчику</a>
-       ''' + get_navigation_links() + '''
     </body>
 </html>
 '''
