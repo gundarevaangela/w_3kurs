@@ -350,3 +350,38 @@ def created():
     </body>
 </html>
 ''', 201
+
+
+
+@app.route("/lab1/cause_error")
+def cause_error():
+    
+    x = 1 / 0
+    return str(x)
+
+
+@app.errorhandler(500)
+def internal_error(err):
+    return '''
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Ошибка сервера</title>
+        <style>
+            body {
+                text-align: center;
+                background: linear-gradient(135deg, #ffd6e7 0%, #ffc2d6 50%, #ffafc5 100%);
+                color: #d63384;
+                margin: 0;
+                padding: 50px;
+                font-family: 'Arial', sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Внутренняя ошибка сервера (500)</h1>
+        <p>Произошла непредвиденная ошибка на сервере</p>
+    </body>
+</html>
+''', 500
