@@ -151,6 +151,44 @@ def index():
     </body>
 </html>
 '''
+@app.route("/lab1")
+def lab1():
+    return '''
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Лабораторная 1</title>
+        <style>
+            body { 
+                font-family: Arial, sans-serif; 
+                margin: 20px; 
+                background: linear-gradient(135deg, #fff0f5 0%, #ffe4e6 50%, #fce7f3 100%); 
+                color: #880e4f; 
+                line-height: 1.6
+            }
+            a { 
+                color: #d63384; 
+                font-weight: bold;
+                text-decoration: none;
+                font-size: 18px;
+                transition: all 0.3s ease;
+            }
+            a:hover { 
+                color: #ff4d94;
+                text-decoration: underline;
+                transform: translateY(-2px);
+            }
+        </style>
+    </head>
+    <body>
+        <p>Flask — фреймворк для создания веб-приложений на языке программирования Python, использующий набор 
+        инструментов Werkzeug, а также шаблонизатор Jinja2. Относится к категории так называемых микрофреймворков 
+        — минималистичных каркасов веб-приложений, сознательно предоставляющих лишь самые базовые возможности.</p>
+        <p><a href="/">На главную</a></p>
+    </body>
+</html>
+'''
 
 def get_navigation_links():
     return '''
