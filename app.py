@@ -546,8 +546,18 @@ def flowers(flower_id):
     if flower_id >= len(flower_list):
         abort(404)
     else:
-        return "Цветок  " + flower_list[flower_id]
-
+        flower = flower_list[flower_id]
+        return f'''
+<!doctype html>
+<html>
+    <body>
+        <h1>Вы выбрали Цветы</h1>
+        <p>Ваш букет из: <b>{flower}</b></p>
+        <a href="/lab2/all_flowers">Посмотреть все цветы</a>
+    </body>
+</html>
+'''
+    
 @app.route('/lab2/add_flower/<name>')
 def add_flower(name):
     flower_list.append(name)
@@ -559,6 +569,26 @@ def add_flower(name):
     <p> Название нового цветка: {name} </p>
     <p> Всего цветов: {len(flower_list)}</p>
     <p> Полный список: {flower_list}</p>
+    </body>
+</html>
+'''
+@app.route('/lab2/add_flower/')
+def add_flower_no_name():
+    return "Вы не задали имя цветка", 400
+
+
+@app.route('/lab2/all_flowers')
+def all_flowers():
+    return f'''
+<!doctype html>
+<html>
+    <body>
+        <h1>Список Цветов</h1>
+        <p>Всего цветов: {len(flower_list)}</p>
+        <ul>
+            {''.join(f"<li>{flower}</li>" for i, flower in enumerate(flower_list))}
+        </ul>
+        <a href="/lab2">Назад к лабораторной 2</a>
     </body>
 </html>
 '''
