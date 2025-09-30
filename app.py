@@ -569,4 +569,4 @@ def example():
     num_lab = '2'
     group = 'FBI-31'
     num_kurs = '3'
-    return render_template('example.html', name=name, num_lab=num_lab, group = group, num_kurs=num_kurs)
+    return render_template('example.html')

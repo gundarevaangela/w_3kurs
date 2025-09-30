@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gundareva Angela. Лабораторная  работа {{num_lab}}</title>
+    <title>{% if name %}{{ name }},{% else %}Анонимус,{% endif %}. Лабораторная работа {{ num_lab }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 </head>
 <body>
     <header>
-        WEB-программирование, часть 2. Лабораторная работа {{num_lab}}
+        WEB-программирование, часть 2. {% if num_lab %}Лабораторная работа 2{% endif %}
     </header>
     <main>
         5 + 2 = {{5+2}}<br>
@@ -19,7 +19,24 @@
 
     </main>
     <footer>
-        &copy; {{name}}, {{group}}, {{num_kurs}} курс, 2025
+        &copy; 
+        {% if name %}
+            {{ name }},
+        {% else %}
+            Анонимус,
+        {% endif %} 
+        {% if group %}
+            {{ group }},
+        {% else %}
+            Группа N,
+        {% endif %}  
+        {% if num_kurs %}
+            {{ course }} курс,
+        {% else %}
+            11 класс,
+        {% endif %} 
+        2025
+        
     </footer>
 </body>
 </html>
