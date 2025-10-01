@@ -540,14 +540,19 @@ def a():
 def a2():
     return 'со слешем'
 
-flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашка']
+flowers = [
+    {"name": "роза", "price": 300},
+    {"name": "тюльпан", "price": 250},
+    {"name": "незабудка", "price": 150},
+    {"name": "ромашка", "price": 200},
+]
 
 @app.route('/lab2/flowers/<int:flower_id>')
-def flowers(flower_id):
-    if flower_id >= len(flower_list):
+def id_flowers(flower_id):
+    if flower_id >= len(flowers):
         abort(404)
     else:
-        flower = flower_list[flower_id]
+        flower = list(flowers[flower_id].values())[0]
         return f'''
 <!doctype html>
 <html>
@@ -561,18 +566,9 @@ def flowers(flower_id):
     
 @app.route('/lab2/add_flower/<name>')
 def add_flower(name):
-    flower_list.append(name)
-    return f'''
-<!doctype html>
-<html>
-    <body>
-    <h1>Добавлен новый цветок</h1>
-    <p> Название нового цветка: {name} </p>
-    <p> Всего цветов: {len(flower_list)}</p>
-    <p> Полный список: {flower_list}</p>
-    </body>
-</html>
-'''
+    flowers.append({"name": name, "price": 300})
+    return redirect(url_for("all_flowers"))
+
 @app.route('/lab2/add_flower/')
 def add_flower_no_name():
     return "Вы не задали имя цветка", 400
@@ -580,22 +576,25 @@ def add_flower_no_name():
 
 @app.route('/lab2/all_flowers')
 def all_flowers():
-    return f'''
-<!doctype html>
-<html>
-    <body>
-        <h1>Список Цветов</h1>
-        <p>Всего цветов: {len(flower_list)}</p>
-        <ul>
-            {''.join(f"<li>{flower}</li>" for i, flower in enumerate(flower_list))}
-        </ul>
-        <a href="/lab2">Назад к лабораторной 2</a>
-    </body>
-</html>
-'''
+    return render_template("flowers.html", flowers=flowers)
+
+
+@app.route("/lab2/del_flower/<int:flower_id>")
+def del_flower(flower_id):
+    if 0 <= flower_id < len(flowers):
+        flowers.pop(flower_id)
+        return redirect(url_for("all_flowers"))
+    else:
+        abort(404)
+
+@app.route('/lab2/del_flower/')
+def del_flower_no_name():
+    return "Вы не задали имя цветка", 400
+
+
 @app.route('/lab2/clear_flowers')
 def clear_flowers():
-    flower_list.clear()
+    flowers.clear()
     return '''
 <!doctype html>
 <html>
