@@ -9,6 +9,7 @@ app.register_blueprint(lab1)
 app.register_blueprint(lab2)
 app.register_blueprint(lab3)
 
+
 # список логов
 access_log = []
 @app.errorhandler(404)
@@ -156,7 +157,6 @@ def not_found(err):
     </body>
 </html>
 ''', 404
-
 
 
 @app.route("/index")
@@ -308,7 +308,6 @@ def index():
     </body>
 </html>
 '''
-
 
 
 @app.errorhandler(500)
