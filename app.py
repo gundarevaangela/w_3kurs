@@ -291,7 +291,8 @@ def index():
             <h1>НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных</h1>
         </header>
         <nav>
-            <a href="/lab1">Первая лабораторная</a>
+            <a href="/lab1">Первая лабораторная</a><br>
+            <a href="/lab2">Вторая лабораторная</a>
         </nav>
         <footer>
             Гундарева Анжела, ФБИ-31, 3 курс, 2025
@@ -589,6 +590,19 @@ def all_flowers():
             {''.join(f"<li>{flower}</li>" for i, flower in enumerate(flower_list))}
         </ul>
         <a href="/lab2">Назад к лабораторной 2</a>
+    </body>
+</html>
+'''
+@app.route('/lab2/clear_flowers')
+def clear_flowers():
+    flower_list.clear()
+    return '''
+<!doctype html>
+<html>
+    <body>
+        <h1>Список очищен</h1>
+        <p>Все цветы.</p>
+        <a href="/lab2/all_flowers">Посмотреть все цветы</a>
     </body>
 </html>
 '''
