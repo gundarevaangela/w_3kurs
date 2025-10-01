@@ -672,3 +672,31 @@ books = [
 @app.route('/lab2/books')
 def show_books():
     return render_template('books.html', books=books)
+
+
+chocolate_bars = [
+    {"name": "Snickers", "desc": "Арахис, нуга, карамель и молочный шоколад. Самый популярный батончик в мире.", "image": "snickers.png"},
+    {"name": "Mars", "desc": "Нуга, карамель и молочный шоколад. Классический вкус с 1932 года.", "image": "mars.jpg"},
+    {"name": "Twix", "desc": "Хрустящее печенье с карамелью в молочном шоколаде. Выпускается в двух пальчиках.", "image": "twix.jpeg"},
+    {"name": "Bounty", "desc": "Нежная кокосовая начинка в молочном или тёмном шоколаде. Райское наслаждение.", "image": "bounty.jpg"},
+    {"name": "Milky Way", "desc": "Воздушная нуга и карамель в молочном шоколаде. Легкий и нежный вкус.", "image": "milkyway.jpg"},
+    {"name": "KitKat", "desc": "Хрустящие вафельные слои в молочном шоколаде. Сломай и поделись с друзьями.", "image": "kitkat.jpg"},
+    {"name": "Nuts", "desc": "Целый лесной орех в хрустящей вафле и молочном шоколаде.", "image": "nuts.jpg"},
+    {"name": "Picnic", "desc": "Хрустящие рисовые шарики, арахис, карамель и молочный шоколад.", "image": "picnic.jpg"},
+    {"name": "M&Ms", "desc": "Шоколадные драже в цветной сахарной глазури. Тают во рту, а не в руках.", "image": "mms.jpg"},
+    {"name": "Kinder Chocolate", "desc": "Нежный молочный шоколад с молочной начинкой. Создан специально для детей.", "image": "kinder.jpg"},
+    {"name": "Kinder Bueno", "desc": "Хрустящие вафли с лесным орехом и сливочным кремом в шоколаде.", "image": "bueno.jpeg"},
+    {"name": "Kinder Joy", "desc": "Шоколадное яйцо с игрушкой внутри. Два удовольствия в одном.", "image": "joy.jpg"},
+    {"name": "Ferrero Rocher", "desc": "Целый лесной орех в хрустящем вафельном шарике и молочном шоколаде.", "image": "ferrero.jpg"},
+    {"name": "Raffaello", "desc": "Нежный кокосовый батончик с цельным миндалем внутри. Легкий и изысканный вкус.", "image": "raffaello.jpg"},
+    {"name": "Toblerone", "desc": "Швейцарский шоколад с медом, нугой и миндалем в фирменной треугольной упаковке.", "image": "toblerone.jpg"},
+    {"name": "Lion", "desc": "Хрустящие злаки, карамель и арахис в молочном шоколаде. Энергия льва.", "image": "lion.jpg"},
+    {"name": "Wispa", "desc": "Воздушный пористый молочный шоколад. Невероятно нежная текстура.", "image": "wispa.png"},
+    {"name": "Crunch", "desc": "Хрустящие рисовые шарики в молочном шоколаде. Уникальная текстура.", "image": "crunch.jpg"},
+    {"name": "Alpen Gold", "desc": "Доступный шоколад российского производства с различными начинками.", "image": "alpengold.jpeg"},
+    {"name": "Рот Фронт", "desc": "Легендарный российский батончик с различными начинками. Суфле, помадка, вафли.", "image": "rotfront.jpg"},
+]
+
+@app.route('/lab2/chocolate')
+def chocolate():
+    return render_template("chocolate.html", bars=chocolate_bars)
