@@ -17,19 +17,21 @@
     {% else %}
     <h1>Пользователь</h1>
     <form>
-        <lebel>Ваше имя:</lebel>
+        <label>Ваше имя:</label>
         <div>
-            <input type="text" placeholder="Как вас зовут?" name="user">
+            <input type="text" placeholder="Как вас зовут?" name="user" value="{{user or ''}}">
+            <span class="error" style="color: #e75480; padding: 2px 8px; border-radius: 3px; transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='#fff0f5'; this.style.boxShadow='0 0 8px rgba(255, 105, 180, 0.5)'" onmouseout="this.style.backgroundColor=''; this.style.boxShadow='none'"> {{errors.user}}</span>
         </div>
         <label>Ваш возраст:</label>
         <div>
-            <input type="number" name="age">
+            <input type="number" name="age" value="{{age or ''}}">
+            <span class="error" style="color: #e75480; padding: 2px 8px; border-radius: 3px; transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='#fff0f5'; this.style.boxShadow='0 0 8px rgba(255, 105, 180, 0.5)'" onmouseout="this.style.backgroundColor=''; this.style.boxShadow='none'"> {{errors.user}}</span>
         </div>
         <label>Ваш пол:</label>
         <div>
             <select name="sex">
-                <option value="male">Мужской</option>
-                <option value=" female">Женский</option>
+                <option value="male"{{sex=='male' and 'selected'}}>Мужской</option>
+                <option value=" female" {{sex == 'female' and 'selected'}}>Женский</option>
             </select>
         </div>
         <div>
