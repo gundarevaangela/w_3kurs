@@ -1,7 +1,9 @@
 
 from flask import Blueprint, url_for, request, redirect, abort, render_template
 import datetime
+
 lab2 = Blueprint('lab2' ,__name__)
+
 @lab2.route('/lab2/a')
 def a():
     return 'без слеша'
@@ -39,8 +41,8 @@ def id_flowers(flower_id):
 
 @lab2.route('/lab2/add_flower/<name>')
 def add_flower(name):
-    flowers.lab2end({"name": name, "price": 300})
-    return redirect(url_for("all_flowers"))
+    flowers.append({"name": name, "price": 300})
+    return redirect(url_for("lab2.all_flowers"))
 
 
 @lab2.route('/lab2/add_flower/')
@@ -57,7 +59,7 @@ def all_flowers():
 def del_flower(flower_id):
     if 0 <= flower_id < len(flowers):
         flowers.pop(flower_id)
-        return redirect(url_for("all_flowers"))
+        return redirect(url_for("lab2.all_flowers"))
     else:
         abort(404)
 
