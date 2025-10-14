@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block lab %}Поиск товаров{% endblock %}
+
+{% block main %}
+    <h1 style="text-align:center;color:#d63384;margin-bottom:30px;font-family:'Georgia', serif;text-shadow:1px 1px 2px rgba(214,51,132,0.2);">Каталог книг</h1>
+
+    <form method="get" action="/lab3/products" style="max-width:500px;margin:auto;padding:25px;border:2px solid #f8bbd9;border-radius:20px;background:linear-gradient(135deg, #fff5f8, #ffeef5);box-shadow:0 8px 25px rgba(214,51,132,0.15);">
+        <div style="margin-bottom:20px;">
+            <label style="display:block;margin-bottom:8px;color:#c2185b;font-weight:bold;font-size:16px;">Мин. цена (₽):</label>
+            <input type="number" name="min_price" value="{{ min_price }}" placeholder="{{ placeholder_min }}" style="width:100%;padding:12px;border:2px solid #f8bbd9;border-radius:12px;font-size:16px;background-color:#fff;transition:all 0.3s;" onfocus="this.style.borderColor='#ec407a';this.style.boxShadow='0 0 8px rgba(236,64,122,0.3)'" onblur="this.style.borderColor='#f8bbd9';this.style.boxShadow='none'">
+        </div>
+        <div style="margin-bottom:25px;">
+            <label style="display:block;margin-bottom:8px;color:#c2185b;font-weight:bold;font-size:16px;">Макс. цена (₽):</label>
+            <input type="number" name="max_price" value="{{ max_price }}" placeholder="{{ placeholder_max }}" style="width:100%;padding:12px;border:2px solid #f8bbd9;border-radius:12px;font-size:16px;background-color:#fff;transition:all 0.3s;" onfocus="this.style.borderColor='#ec407a';this.style.boxShadow='0 0 8px rgba(236,64,122,0.3)'" onblur="this.style.borderColor='#f8bbd9';this.style.boxShadow='none'">
+        </div>
+        <div style="text-align:center;">
+            <button type="submit" style="background:linear-gradient(45deg, #ec407a, #d81b60);color:white;padding:14px 35px;border:none;border-radius:30px;font-weight:bold;font-size:16px;cursor:pointer;transition:transform 0.2s;margin-right:15px;box-shadow:0 4px 15px rgba(236,64,122,0.3);">Поиск книг</button>
+            <a href="/lab3/products/reset" style="display:inline-block;background:linear-gradient(45deg, #f48fb1, #e91e63);color:white;padding:14px 30px;border-radius:30px;text-decoration:none;font-weight:bold;font-size:16px;transition:transform 0.2s;box-shadow:0 4px 15px rgba(244,143,177,0.3);">Сбросить фильтры</a>
+        </div>
+    </form>
+
+    <h3 style="text-align:center;margin-top:30px;color:#880e4f;font-family:'Arial', sans-serif;font-size:20px;">Найдено книг: <span style="color:#ec407a;font-weight:bold;">{{ count }}</span></h3>
+
+    {% if count == 0 %}
+    <p style="text-align:center;color:#d81b60;font-size:18px;padding:20px;background-color:#fff5f8;border:2px solid #f8bbd9;border-radius:15px;max-width:400px;margin:20px auto;font-weight:bold;">Книги по вашему запросу не найдены</p>
+    {% else %}
+    <div style="overflow-x:auto;margin:30px auto;max-width:95%;">
+        <table style="margin:auto;border-collapse:collapse;width:100%;background:white;border-radius:15px;overflow:hidden;box-shadow:0 8px 25px rgba(214,51,132,0.1);border:2px solid #f8bbd9;">
+            <tr style="background:linear-gradient(135deg, #ec407a, #d81b60);color:white;">
+                <th style="padding:18px;text-align:left;border-bottom:2px solid #f8bbd9;font-size:16px;">Название</th>
+                <th style="padding:18px;text-align:left;border-bottom:2px solid #f8bbd9;font-size:16px;">Автор</th>
+                <th style="padding:18px;text-align:left;border-bottom:2px solid #f8bbd9;font-size:16px;">Жанр</th>
+                <th style="padding:18px;text-align:center;border-bottom:2px solid #f8bbd9;font-size:16px;">Страниц</th>
+                <th style="padding:18px;text-align:right;border-bottom:2px solid #f8bbd9;font-size:16px;">Цена</th>
+            </tr>
+            {% for p in products %}
+            <tr style="background-color:{% if loop.index % 2 == 0 %}#fff5f8{% else %}white{% endif %};transition:all 0.3s;" onmouseover="this.style.backgroundColor='#ffeef5';this.style.transform='translateY(-2px)'" onmouseout="this.style.backgroundColor='{% if loop.index % 2 == 0 %}#fff5f8{% else %}white{% endif %}';this.style.transform='translateY(0)'">
+                <td style="padding:15px;border-bottom:1px solid #f8bbd9;font-weight:bold;color:#880e4f;font-size:15px;">{{ p.name }}</td>
+                <td style="padding:15px;border-bottom:1px solid #f8bbd9;color:#c2185b;font-size:15px;">{{ p.author }}</td>
+                <td style="padding:15px;border-bottom:1px solid #f8bbd9;">
+                    <span style="background:linear-gradient(45deg, #f8bbd9, #f48fb1);color:#880e4f;padding:6px 12px;border-radius:20px;font-size:13px;font-weight:bold;">{{ p.genre }}</span>
+                </td>
+                <td style="padding:15px;border-bottom:1px solid #f8bbd9;text-align:center;color:#ad1457;font-weight:bold;font-size:15px;">{{ p.pages }}</td>
+                <td style="padding:15px;border-bottom:1px solid #f8bbd9;text-align:right;font-weight:bold;color:#ec407a;font-size:16px;">{{ p.price }} ₽</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+    
+    <div style="text-align:center;margin-top:30px;">
+        <a href="/lab3" style="display:inline-block;color:#ec407a;text-decoration:none;font-weight:bold;font-size:16px;padding:12px 25px;border:2px solid #ec407a;border-radius:25px;transition:all 0.3s;background:linear-gradient(45deg, transparent, #fff5f8);" onmouseover="this.style.backgroundColor='#ec407a';this.style.color='white';this.style.transform='translateY(-2px)'" onmouseout="this.style.backgroundColor='transparent';this.style.color='#ec407a';this.style.transform='translateY(0)'">← Вернуться на главную</a>
+    </div>
+{% endblock %}

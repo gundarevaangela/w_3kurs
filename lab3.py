@@ -166,3 +166,88 @@ def ticket():
             return render_template('lab3/ticket_result.html', data=data)
 
     return render_template('lab3/ticket.html', errors=errors, data=data)
+
+
+PRODUCTS = [
+    {'name': 'Мастер и Маргарита', 'price': 450, 'author': 'Михаил Булгаков', 'genre': 'роман', 'pages': 480},
+    {'name': 'Преступление и наказание', 'price': 380, 'author': 'Федор Достоевский', 'genre': 'психологический роман', 'pages': 592},
+    {'name': 'Война и мир', 'price': 650, 'author': 'Лев Толстой', 'genre': 'эпопея', 'pages': 1225},
+    {'name': '1984', 'price': 320, 'author': 'Джордж Оруэлл', 'genre': 'антиутопия', 'pages': 320},
+    {'name': 'Гарри Поттер и философский камень', 'price': 550, 'author': 'Джоан Роулинг', 'genre': 'фэнтези', 'pages': 432},
+    {'name': 'Маленький принц', 'price': 280, 'author': 'Антуан де Сент-Экзюпери', 'genre': 'притча', 'pages': 96},
+    {'name': 'Три товарища', 'price': 420, 'author': 'Эрих Мария Ремарк', 'genre': 'роман', 'pages': 384},
+    {'name': 'Сто лет одиночества', 'price': 480, 'author': 'Габриэль Гарсиа Маркес', 'genre': 'магический реализм', 'pages': 416},
+    {'name': 'Анна Каренина', 'price': 520, 'author': 'Лев Толстой', 'genre': 'роман', 'pages': 864},
+    {'name': 'Убить пересмешника', 'price': 390, 'author': 'Харпер Ли', 'genre': 'роман воспитания', 'pages': 416},
+    {'name': 'Властелин колец', 'price': 890, 'author': 'Джон Р. Р. Толкин', 'genre': 'фэнтези', 'pages': 1137},
+    {'name': 'Гордость и предубеждение', 'price': 350, 'author': 'Джейн Остин', 'genre': 'роман', 'pages': 432},
+    {'name': 'Над пропастью во ржи', 'price': 310, 'author': 'Джером Сэлинджер', 'genre': 'роман', 'pages': 240},
+    {'name': 'Тень горы', 'price': 720, 'author': 'Грегори Дэвид Робертс', 'genre': 'приключения', 'pages': 880},
+    {'name': 'Атлант расправил плечи', 'price': 950, 'author': 'Айн Рэнд', 'genre': 'философский роман', 'pages': 1394},
+    {'name': 'Шантарам', 'price': 680, 'author': 'Грегори Дэвид Робертс', 'genre': 'роман', 'pages': 864},
+    {'name': 'Код да Винчи', 'price': 420, 'author': 'Дэн Браун', 'genre': 'детектив', 'pages': 489},
+    {'name': 'Игра престолов', 'price': 580, 'author': 'Джордж Мартин', 'genre': 'фэнтези', 'pages': 694},
+    {'name': 'Алхимик', 'price': 290, 'author': 'Пауло Коэльо', 'genre': 'роман', 'pages': 208},
+    {'name': 'Дюна', 'price': 520, 'author': 'Фрэнк Герберт', 'genre': 'научная фантастика', 'pages': 704}
+]
+
+@lab3.route('/lab3/products')
+def products():
+    min_price = request.args.get('min_price')
+    max_price = request.args.get('max_price')
+
+    cookie_min = request.cookies.get('min_price')
+    cookie_max = request.cookies.get('max_price')
+
+    if not min_price and cookie_min:
+        min_price = cookie_min
+    if not max_price and cookie_max:
+        max_price = cookie_max
+
+    try:
+        min_val = int(min_price) if min_price else None
+    except ValueError:
+        min_val = None
+    try:
+        max_val = int(max_price) if max_price else None
+    except ValueError:
+        max_val = None
+
+    prices = [p['price'] for p in PRODUCTS]
+    placeholder_min = min(prices)
+    placeholder_max = max(prices)
+
+    if min_val is not None and max_val is not None and min_val > max_val:
+        min_val, max_val = max_val, min_val
+
+    filtered = []
+    for p in PRODUCTS:
+        if min_val is not None and p['price'] < min_val:
+            continue
+        if max_val is not None and p['price'] > max_val:
+            continue
+        filtered.append(p)
+
+    resp = make_response(render_template(
+        'lab3/products.html',
+        products=filtered,
+        count=len(filtered),
+        min_price=min_val if min_val is not None else '',
+        max_price=max_val if max_val is not None else '',
+        placeholder_min=placeholder_min,
+        placeholder_max=placeholder_max
+    ))
+
+    if min_val is not None:
+        resp.set_cookie('min_price', str(min_val))
+    if max_val is not None:
+        resp.set_cookie('max_price', str(max_val))
+
+    return resp
+
+@lab3.route('/lab3/products/reset')
+def products_reset():
+    resp = make_response(redirect('/lab3/products'))
+    resp.set_cookie('min_price', '', expires=0)
+    resp.set_cookie('max_price', '', expires=0)
+    return resp
