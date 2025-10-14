@@ -3,45 +3,46 @@
 {% block lab %}Лабораторная работа 3{% endblock %}
 
 {% block main %}
-<h1>Настройки внешнего вида</h1>
+<h1 style="color:#d63384;text-align:center;margin-bottom:30px;font-size:28px;">Настройки внешнего вида</h1>
 
-<form>
-        <div class="form-group">
-            <label for="color">Цвет текста:</label>
-            <input type="color" id="color" name="color" value="{{ color or '#000000' }}">
-        </div>
+<form style="max-width:500px;margin:0 auto;padding:60px;border:1px solid #f8bbd9;border-radius:15px;background-color:#fff5f8;">
+    <div style="margin-bottom:20px;">
+        <label for="color" style="color:#c2185b;display:block;margin-bottom:8px;font-weight:bold;">Цвет текста:</label>
+        <input type="color" id="color" name="color" value="{{ color or '#000000' }}" style="width:20%;border:1px solid #f8bbd9;border-radius:50px;background-color:#fff;cursor:pointer;">
+    </div>
 
-        <div class="form-group">
-            <label for="bg_color">Цвет фона:</label>
-            <input type="color" id="bg_color" name="bg_color" value="{{ bg_color or '#ffffff' }}">
-        </div>
+    <div style="margin-bottom:20px;">
+        <label for="bg_color" style="color:#c2185b;display:block;margin-bottom:8px;font-weight:bold;">Цвет фона:</label>
+        <input type="color" id="bg_color" name="bg_color" value="{{ bg_color or '#ffffff' }}" style="width:20%;border:1px solid #f8bbd9;border-radius:8px;background-color:#fff;cursor:pointer;">
+    </div>
 
-        <div class="form-group">
-            <label for="font_size">Размер шрифта:</label>
-            <select id="font_size" name="font_size">
-                <option value="14px" {% if font_size == '14px' %}selected{% endif %}>Маленький (14px)</option>
-                <option value="16px" {% if font_size == '16px' or not font_size %}selected{% endif %}>Средний (16px)</option>
-                <option value="18px" {% if font_size == '18px' %}selected{% endif %}>Большой (18px)</option>
-                <option value="20px" {% if font_size == '20px' %}selected{% endif %}>Очень большой (20px)</option>
-            </select>
-        </div>
+    <div style="margin-bottom:20px;">
+        <label for="font_size" style="color:#c2185b;display:block;margin-bottom:8px;font-weight:bold;">Размер шрифта:</label>
+        <select id="font_size" name="font_size" style="width:100%;padding:10px;border:2px solid #f8bbd9;border-radius:8px;background-color:#fff;color:#c2185b;font-size:14px;">
+            <option value="14px" {% if font_size == '14px' %}selected{% endif %}>Маленький (14px)</option>
+            <option value="16px" {% if font_size == '16px' or not font_size %}selected{% endif %}>Средний (16px)</option>
+            <option value="18px" {% if font_size == '18px' %}selected{% endif %}>Большой (18px)</option>
+            <option value="20px" {% if font_size == '20px' %}selected{% endif %}>Очень большой (20px)</option>
+        </select>
+    </div>
 
-        <div class="form-group">
-            <label for="font_family">Шрифт:</label>
-            <select id="font_family" name="font_family">
-                <option value="Arial, sans-serif" {% if font_family == 'Arial, sans-serif' or not font_family %}selected{% endif %}>Arial</option>
-                <option value="'Times New Roman', serif" {% if font_family == "'Times New Roman', serif" %}selected{% endif %}>Times New Roman</option>
-                <option value="'Courier New', monospace" {% if font_family == "'Courier New', monospace" %}selected{% endif %}>Courier New</option>
-                <option value="Georgia, serif" {% if font_family == 'Georgia, serif' %}selected{% endif %}>Georgia</option>
-            </select>
-        </div>
+    <div style="margin-bottom:30px;">
+        <label for="font_family" style="color:#c2185b;display:block;margin-bottom:8px;font-weight:bold;">Шрифт:</label>
+        <select id="font_family" name="font_family" style="width:100%;padding:10px;border:2px solid #f8bbd9;border-radius:8px;background-color:#fff;color:#c2185b;font-size:14px;">
+            <option value="Arial, sans-serif" {% if font_family == 'Arial, sans-serif' or not font_family %}selected{% endif %}>Arial</option>
+            <option value="'Times New Roman', serif" {% if font_family == "'Times New Roman', serif" %}selected{% endif %}>Times New Roman</option>
+            <option value="'Courier New', monospace" {% if font_family == "'Courier New', monospace" %}selected{% endif %}>Courier New</option>
+            <option value="Georgia, serif" {% if font_family == 'Georgia, serif' %}selected{% endif %}>Georgia</option>
+        </select>
+    </div>
 
-        <div class="form-actions">
-            <button type="submit">Применить</button>
-        </div>
-    </form>
+    <div style="text-align:center;">
+        <button type="submit" style="background:linear-gradient(45deg, #ec407a, #d81b60);color:white;padding:12px 30px;border:none;border-radius:25px;font-weight:bold;font-size:16px;cursor:pointer;transition:transform 0.2s;">Применить</button>
+        <a href="/lab3/settings/clear" style="display:inline-block;margin-left:15px;background:linear-gradient(45deg, #ff6b95, #e91e63);color:white;padding:8px 20px;border-radius:25px;text-decoration:none;font-weight:bold;font-size:14px;transition:transform 0.2s;">Очистить настройки</a>
+    </div>
+</form>
 
-<div style="text-align:center;margin-top:20px;">
-    <a href="/lab3" style="color:#c41a8b;">Вернуться на главную</a>
+<div style="text-align:center;margin-top:30px;">
+    <a href="/lab3" style="color:#d81b60;text-decoration:none;font-weight:bold;font-size:16px;padding:10px 20px;border:2px solid #f8bbd9;border-radius:25px;transition:all 0.3s;">Вернуться на главную</a>
 </div>
 {% endblock %}
