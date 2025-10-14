@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block lab %}Бронирование билета{% endblock %}
+
+{% block main %}
+<h1 style="text-align:center;color:#d63384;">Форма бронирования железнодорожного билета</h1>
+
+<form action="/lab3/ticket" method="get" style="max-width:500px;margin:auto;padding:20px;border:2px solid #f8bbd9;border-radius:15px;background-color:#fff5f8;">
+
+    <div style="margin-bottom:15px;">
+        <label style="color:#c2185b;">ФИО пассажира:</label>
+        <input type="text" name="fio" value="{{ data.fio or '' }}" style="width:100%;padding:10px;border:1px solid #f8bbd9;border-radius:8px;background-color:#fff;">
+        <span style="color:#e91e63;">{{ errors.fio }}</span>
+    </div>
+
+    <div style="margin-bottom:15px;">
+        <label style="color:#c2185b;">Возраст:</label>
+        <input type="number" name="age" min="1" max="120" value="{{ data.age or '' }}" style="width:100%;padding:10px;border:1px solid #f8bbd9;border-radius:8px;background-color:#fff;">
+        <span style="color:#e91e63;">{{ errors.age }}</span>
+    </div>
+
+    <div style="margin-bottom:15px;">
+        <label style="color:#c2185b;">Полка:</label><br>
+        {% for option in ['нижняя', 'верхняя', 'верхняя боковая', 'нижняя боковая'] %}
+            <label style="color:#d63384;"><input type="radio" name="berth" value="{{ option }}" {% if data.berth == option %}checked{% endif %}> {{ option }}</label><br>
+        {% endfor %}
+        <span style="color:#e91e63;">{{ errors.berth }}</span>
+    </div>
+
+    <div style="margin-bottom:15px;">
+        <label style="color:#d63384;"><input type="checkbox" name="linen" {% if data.linen %}checked{% endif %}> С бельём (+75₽)</label><br>
+        <label style="color:#d63384;"><input type="checkbox" name="baggage" {% if data.baggage %}checked{% endif %}> С багажом (+250₽)</label><br>
+        <label style="color:#d63384;"><input type="checkbox" name="insurance" {% if data.insurance %}checked{% endif %}> Страховка (+150₽)</label>
+    </div>
+
+    <div style="margin-bottom:15px;">
+        <label style="color:#c2185b;">Пункт выезда:</label>
+        <input type="text" name="from_city" value="{{ data.from_city or '' }}" style="width:100%;padding:10px;border:1px solid #f8bbd9;border-radius:8px;background-color:#fff;">
+        <span style="color:#e91e63;">{{ errors.from_city }}</span>
+    </div>
+
+    <div style="margin-bottom:15px;">
+        <label style="color:#c2185b;">Пункт назначения:</label>
+        <input type="text" name="to_city" value="{{ data.to_city or '' }}" style="width:100%;padding:10px;border:1px solid #f8bbd9;border-radius:8px;background-color:#fff;">
+        <span style="color:#e91e63;">{{ errors.to_city }}</span>
+    </div>
+
+    <div style="margin-bottom:15px;">
+        <label style="color:#c2185b;">Дата поездки:</label>
+        <input type="date" name="date" value="{{ data.date or '' }}" style="width:100%;padding:10px;border:1px solid #f8bbd9;border-radius:8px;background-color:#fff;">
+        <span style="color:#e91e63;">{{ errors.date }}</span>
+    </div>
+
+    <div style="text-align:center;">
+        <button type="submit" style="background:linear-gradient(45deg, #ec407a, #d81b60);color:white;padding:12px 25px;border:none;border-radius:25px;font-weight:bold;">Сформировать билет</button>
+    </div>
+</form>
+{% endblock %}
