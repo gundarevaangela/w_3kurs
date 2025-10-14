@@ -14,8 +14,8 @@
             color: {{request.cookies.get('color')}};
             {%endif%}
         
-            {% if request.cookies.get('background_color') %}
-            background-color: {{ request.cookies.get('background_color') }};
+            {% if request.cookies.get('bg_color') %}
+            background-color: {{ request.cookies.get('bg_color') }};
             {% endif %}
             
             {% if request.cookies.get('font_size') %}
