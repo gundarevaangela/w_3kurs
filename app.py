@@ -12,10 +12,10 @@ app.register_blueprint(lab3)
 
 # список логов
 access_log = []
+
 @app.errorhandler(404)
 def not_found(err):
-    osh = url_for("static", filename="404.jpeg") 
-
+    osh = url_for("static", filename="lab1/404.jpeg") 
 
     user_ip = request.remote_addr
     access_time = str(datetime.datetime.now())
@@ -29,21 +29,20 @@ def not_found(err):
         log_html += f"<li>{entry}</li>"
     log_html += "</ul>"
 
-
-    return '''
+    return f'''
 <!doctype html>
 <html>
     <head>
         <style>
-            body {
+            body {{
                 margin: 0;
                 padding: 30px;
                 background: linear-gradient(135deg, #ffe4ec 0%, #ffd1dc 50%, #ffc2d6 100%);
                 font-family: 'Arial', sans-serif;
                 color: #d63384;
                 min-height: 100vh;
-            }
-            .container {
+            }}
+            .container {{
                 max-width: 1000px;
                 margin: 0 auto;
                 background: rgba(255, 255, 255, 0.95);
@@ -51,37 +50,37 @@ def not_found(err):
                 border-radius: 20px;
                 box-shadow: 0 10px 30px rgba(214, 51, 132, 0.2);
                 border: 3px solid #ff9eb4;
-            }
-            h1 {
+            }}
+            h1 {{
                 color: #c2185b;
                 font-size: 2.5em;
                 text-align: center;
                 margin-bottom: 20px;
                 text-shadow: 2px 2px 4px rgba(194, 24, 91, 0.1);
-            }
-            h2 {
+            }}
+            h2 {{
                 color: #d63384;
                 border-bottom: 2px solid #ffafc5;
                 padding-bottom: 10px;
                 margin-top: 30px;
-            }
-            .error-image {
+            }}
+            .error-image {{
                 display: block;
                 margin: 20px auto;
                 max-width: 300px;
                 border-radius: 15px;
                 box-shadow: 0 6px 15px rgba(214, 51, 132, 0.25);
                 border: 2px solid #ffafc5;
-            }
-            .info {
+            }}
+            .info {{
                 background: linear-gradient(135deg, #ffe4ec 0%, #ffd1dc 100%);
                 padding: 20px;
                 border-radius: 15px;
                 margin: 20px 0;
                 border: 2px solid #ffc2d6;
                 font-size: 1.1em;
-            }
-            .log {
+            }}
+            .log {{
                 background: rgba(255, 240, 245, 0.8);
                 padding: 20px;
                 border-radius: 15px;
@@ -89,13 +88,13 @@ def not_found(err):
                 border: 2px solid #ffd6e7;
                 max-height: 300px;
                 overflow-y: auto;
-            }
-            .log ul {
+            }}
+            .log ul {{
                 list-style: none;
                 padding: 0;
                 margin: 0;
-            }
-            .log li {
+            }}
+            .log li {{
                 background: rgba(255, 255, 255, 0.7);
                 margin: 8px 0;
                 padding: 12px;
@@ -104,13 +103,13 @@ def not_found(err):
                 font-family: 'Courier New', monospace;
                 font-size: 0.9em;
                 color: #880e4f;
-            }
-            .log li:hover {
+            }}
+            .log li:hover {{
                 background: rgba(255, 255, 255, 0.9);
                 transform: translateX(5px);
                 transition: all 0.3s ease;
-            }
-            a {
+            }}
+            a {{
                 color: #e91e63;
                 text-decoration: none;
                 font-weight: bold;
@@ -121,39 +120,37 @@ def not_found(err):
                 margin: 10px 5px;
                 transition: all 0.3s ease;
                 border: 2px solid #ffafc5;
-            }
-            a:hover {
+            }}
+            a:hover {{
                 background: rgba(255, 255, 255, 0.9);
                 transform: translateY(-2px);
                 box-shadow: 0 4px 15px rgba(233, 30, 99, 0.2);
-            }
-            .home-button {
+            }}
+            .home-button {{
                 background: linear-gradient(135deg, #ff4d94 0%, #d63384 100%) !important;
                 color: white !important;
                 padding: 15px 30px !important;
                 font-size: 1.1em !important;
-            }
-            .home-button:hover {
+            }}
+            .home-button:hover {{
                 background: linear-gradient(135deg, #ff6fa9 0%, #e91e63 100%) !important;
-            }
+            }}
         </style>
     </head>
     <body>
        <h1>Ошибка 404 - Страница не найдена</h1>
        <p>Котик устал, попробуйте позже</p>
-       <img src="''' + osh + '''">
+       <img src="{osh}" class="error-image">
         <div class="info">
-            Ваш IP: '''+str(user_ip)+'''<br>
-            Дата доступа: '''+access_time+'''<br>
-            <a href="/">На главную</a>
+            Ваш IP: {user_ip}<br>
+            Дата доступа: {access_time}<br>
+            <a href="/" class="home-button">На главную</a>
         </div>
         <div class="log">
             <h2>Журнал посещений</h2>
-            '''+log_html+'''
+            {log_html}
         </div>
        <br>
-      
-       
     </body>
 </html>
 ''', 404
@@ -336,3 +333,6 @@ def internal_error(err):
 </html>
 ''', 500
 
+
+if __name__ == '__main__':
+    app.run(debug=True)

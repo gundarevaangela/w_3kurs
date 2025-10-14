@@ -1,6 +1,6 @@
 from flask import Blueprint, url_for, request, redirect, abort
 import datetime
-lab1 = Blueprint('lab1' ,__name__)
+lab1 = Blueprint('lab1', __name__)
 
 
 @lab1.route("/lab1")
@@ -60,7 +60,6 @@ def lab():
             <li><a href="/lab1/cause_error">/cause_error</a></li>
         </ul>
     </body>
-    </body>
 </html>
 '''
 
@@ -114,12 +113,12 @@ def author():
         name = "Gundareva Angela"
         group ="FBI-31"
         faculty = "FB"
-        return """<!doctype html>
+        return f"""<!doctype html>
             <html>
                 <body>
-                    <p> Студент: """ + name + """</p>
-                    <p> Группа: """ + group + """</p>
-                    <p> Факультет: """ + faculty + """</p>
+                    <p> Студент: {name}</p>
+                    <p> Группа: {group}</p>
+                    <p> Факультет: {faculty}</p>
                     <a href="/lab1/web">web</a>
                 </body>
             </html>""" 
@@ -127,8 +126,8 @@ def author():
 
 @lab1.route('/lab1/image')
 def image():
-      path = url_for("static", filename="cat.jpg")
-      css_path = url_for("static", filename="lab1.css")
+      path = url_for("static", filename="lab1/cat.jpg")
+      css_path = url_for("static", filename="lab1/lab1.css")
       return f'''
 <!doctype html>
 <html>
@@ -137,7 +136,7 @@ def image():
     </head>
     <body>
        <h1>Кот</h1>
-       <img src="''' + path + '''">
+       <img src="{path}">
     </body>
 </html>''', 200, {
         'Content-Language': 'ru',
@@ -150,19 +149,19 @@ count = 0
 def counter():
     global count
     count += 1
-    time =datetime.datetime.today()
+    time = datetime.datetime.today()
     url = request.url
     client_ip = request.remote_addr
 
-    return '''
+    return f'''
 <!doctype html>
 <html>
     <body>
-       Сколько раз вы сюда заходили: ''' + str(count) +'''
+       Сколько раз вы сюда заходили: {count}
        <hr>
-       Дата и время: ''' + str(time) + '''<br>
-       Запрошенный адрес: ''' + str(url) + '''<br>
-       Ваш IP-адрес: ''' + str(client_ip) + '''<br> 
+       Дата и время: {time}<br>
+       Запрошенный адрес: {url}<br>
+       Ваш IP-адрес: {client_ip}<br> 
        <hr>
        <a href="/lab1/reset_counter">Очистить счетчик</a>
     </body>
@@ -206,8 +205,5 @@ def created():
 
 @lab1.route("/lab1/cause_error")
 def cause_error():
-    
     x = 1 / 0
     return str(x)
-
-

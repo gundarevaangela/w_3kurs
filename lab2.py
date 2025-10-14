@@ -1,8 +1,7 @@
-
 from flask import Blueprint, url_for, request, redirect, abort, render_template
 import datetime
 
-lab2 = Blueprint('lab2' ,__name__)
+lab2 = Blueprint('lab2', __name__)
 
 @lab2.route('/lab2/a')
 def a():
@@ -26,7 +25,7 @@ def id_flowers(flower_id):
     if flower_id >= len(flowers):
         abort(404)
     else:
-        flower = list(flowers[flower_id].values())[0]
+        flower = flowers[flower_id]["name"]
         return f'''
 <!doctype html>
 <html>
@@ -52,7 +51,7 @@ def add_flower_no_name():
 
 @lab2.route('/lab2/all_flowers')
 def all_flowers():
-    return render_template("flowers.html", flowers=flowers)
+    return render_template("lab2/flowers.html", flowers=flowers)
 
 
 @lab2.route("/lab2/del_flower/<int:flower_id>")
@@ -77,7 +76,7 @@ def clear_flowers():
 <html>
     <body>
         <h1>Список очищен</h1>
-        <p>Все цветы.</p>
+        <p>Все цветы удалены.</p>
         <a href="/lab2/all_flowers">Посмотреть все цветы</a>
     </body>
 </html>
@@ -97,7 +96,7 @@ def example():
         {'name':'мандарины', 'price': 95},
         {'name':'манго', 'price': 321},
     ]
-    return render_template('example.html',
+    return render_template('lab2/example.html',
                         name=name,
                         num_lab=num_lab,
                         group=group,
@@ -107,13 +106,14 @@ def example():
 
 @lab2.route('/lab2')
 def lab():
-    return render_template('lab2.html')
+    return render_template('lab2/lab2.html')
 
 
 @lab2.route('/lab2/filters')
 def filters():
     phrase = 'О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных...'
-    return render_template('filter.html', phrase = phrase)
+    return render_template('lab2/filter.html', phrase=phrase)
+
 
 @lab2.route('/lab2/calc/<int:a>/<int:b>')
 def calc(a, b):
@@ -165,32 +165,32 @@ books = [
 
 @lab2.route('/lab2/books')
 def show_books():
-    return render_template('books.html', books=books)
+    return render_template('lab2/books.html', books=books)
 
 
 chocolate_bars = [
-    {"name": "Snickers", "desc": "Арахис, нуга, карамель и молочный шоколад. Самый популярный батончик в мире.", "image": "snickers.png"},
-    {"name": "Mars", "desc": "Нуга, карамель и молочный шоколад. Классический вкус с 1932 года.", "image": "mars.jpg"},
-    {"name": "Twix", "desc": "Хрустящее печенье с карамелью в молочном шоколаде. Выпускается в двух пальчиках.", "image": "twix.jpeg"},
-    {"name": "Bounty", "desc": "Нежная кокосовая начинка в молочном или тёмном шоколаде. Райское наслаждение.", "image": "bounty.jpg"},
-    {"name": "Milky Way", "desc": "Воздушная нуга и карамель в молочном шоколаде. Легкий и нежный вкус.", "image": "milkyway.jpg"},
-    {"name": "KitKat", "desc": "Хрустящие вафельные слои в молочном шоколаде. Сломай и поделись с друзьями.", "image": "kitkat.jpg"},
-    {"name": "Nuts", "desc": "Целый лесной орех в хрустящей вафле и молочном шоколаде.", "image": "nuts.jpg"},
-    {"name": "Picnic", "desc": "Хрустящие рисовые шарики, арахис, карамель и молочный шоколад.", "image": "picnic.jpg"},
-    {"name": "M&Ms", "desc": "Шоколадные драже в цветной сахарной глазури. Тают во рту, а не в руках.", "image": "mms.jpg"},
-    {"name": "Kinder Chocolate", "desc": "Нежный молочный шоколад с молочной начинкой. Создан специально для детей.", "image": "kinder.jpg"},
-    {"name": "Kinder Bueno", "desc": "Хрустящие вафли с лесным орехом и сливочным кремом в шоколаде.", "image": "bueno.jpeg"},
-    {"name": "Kinder Joy", "desc": "Шоколадное яйцо с игрушкой внутри. Два удовольствия в одном.", "image": "joy.jpg"},
-    {"name": "Ferrero Rocher", "desc": "Целый лесной орех в хрустящем вафельном шарике и молочном шоколаде.", "image": "ferrero.jpg"},
-    {"name": "Raffaello", "desc": "Нежный кокосовый батончик с цельным миндалем внутри. Легкий и изысканный вкус.", "image": "raffaello.jpg"},
-    {"name": "Toblerone", "desc": "Швейцарский шоколад с медом, нугой и миндалем в фирменной треугольной упаковке.", "image": "toblerone.jpg"},
-    {"name": "Lion", "desc": "Хрустящие злаки, карамель и арахис в молочном шоколаде. Энергия льва.", "image": "lion.jpg"},
-    {"name": "Wispa", "desc": "Воздушный пористый молочный шоколад. Невероятно нежная текстура.", "image": "wispa.png"},
-    {"name": "Crunch", "desc": "Хрустящие рисовые шарики в молочном шоколаде. Уникальная текстура.", "image": "crunch.jpg"},
-    {"name": "Alpen Gold", "desc": "Доступный шоколад российского производства с различными начинками.", "image": "alpengold.jpeg"},
-    {"name": "Рот Фронт", "desc": "Легендарный российский батончик с различными начинками. Суфле, помадка, вафли.", "image": "rotfront.jpg"},
+    {"name": "Snickers", "desc": "Арахис, нуга, карамель и молочный шоколад. Самый популярный батончик в мире.", "image": "lab2/snickers.png"},
+    {"name": "Mars", "desc": "Нуга, карамель и молочный шоколад. Классический вкус с 1932 года.", "image": "lab2/mars.jpg"},
+    {"name": "Twix", "desc": "Хрустящее печенье с карамелью в молочном шоколаде. Выпускается в двух пальчиках.", "image": "lab2/twix.jpeg"},
+    {"name": "Bounty", "desc": "Нежная кокосовая начинка в молочном или тёмном шоколаде. Райское наслаждение.", "image": "lab2/bounty.jpg"},
+    {"name": "Milky Way", "desc": "Воздушная нуга и карамель в молочном шоколаде. Легкий и нежный вкус.", "image": "lab2/milkyway.jpg"},
+    {"name": "KitKat", "desc": "Хрустящие вафельные слои в молочном шоколаде. Сломай и поделись с друзьями.", "image": "lab2/kitkat.jpg"},
+    {"name": "Nuts", "desc": "Целый лесной орех в хрустящей вафле и молочном шоколаде.", "image": "lab2/nuts.jpg"},
+    {"name": "Picnic", "desc": "Хрустящие рисовые шарики, арахис, карамель и молочный шоколад.", "image": "lab2/picnic.jpg"},
+    {"name": "M&Ms", "desc": "Шоколадные драже в цветной сахарной глазури. Тают во рту, а не в руках.", "image": "lab2/mms.jpg"},
+    {"name": "Kinder Chocolate", "desc": "Нежный молочный шоколад с молочной начинкой. Создан специально для детей.", "image": "lab2/kinder.jpg"},
+    {"name": "Kinder Bueno", "desc": "Хрустящие вафли с лесным орехом и сливочным кремом в шоколаде.", "image": "lab2/bueno.jpeg"},
+    {"name": "Kinder Joy", "desc": "Шоколадное яйцо с игрушкой внутри. Два удовольствия в одном.", "image": "lab2/joy.jpg"},
+    {"name": "Ferrero Rocher", "desc": "Целый лесной орех в хрустящем вафельном шарике и молочном шоколаде.", "image": "lab2/ferrero.jpg"},
+    {"name": "Raffaello", "desc": "Нежный кокосовый батончик с цельным миндалем внутри. Легкий и изысканный вкус.", "image": "lab2/raffaello.jpg"},
+    {"name": "Toblerone", "desc": "Швейцарский шоколад с медом, нугой и миндалем в фирменной треугольной упаковке.", "image": "lab2/toblerone.jpg"},
+    {"name": "Lion", "desc": "Хрустящие злаки, карамель и арахис в молочном шоколаде. Энергия льва.", "image": "lab2/lion.jpg"},
+    {"name": "Wispa", "desc": "Воздушный пористый молочный шоколад. Невероятно нежная текстура.", "image": "lab2/wispa.png"},
+    {"name": "Crunch", "desc": "Хрустящие рисовые шарики в молочном шоколаде. Уникальная текстура.", "image": "lab2/crunch.jpg"},
+    {"name": "Alpen Gold", "desc": "Доступный шоколад российского производства с различными начинками.", "image": "lab2/alpengold.jpeg"},
+    {"name": "Рот Фронт", "desc": "Легендарный российский батончик с различными начинками. Суфле, помадка, вафли.", "image": "lab2/rotfront.jpg"},
 ]
 
 @lab2.route('/lab2/chocolate')
 def chocolate():
-    return render_template("chocolate.html", bars=chocolate_bars)
+    return render_template("lab2/chocolate.html", bars=chocolate_bars)
