@@ -248,6 +248,6 @@ def products():
 @lab3.route('/lab3/products/reset')
 def products_reset():
     resp = make_response(redirect('/lab3/products'))
-    resp.set_cookie('min_price', '', expires=0)
+    resp.set_cookie('min_price', '', expires=1)
     resp.set_cookie('max_price', '', expires=0)
     return resp

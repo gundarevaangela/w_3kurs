@@ -3,11 +3,13 @@ import datetime
 from lab1 import lab1
 from lab2 import lab2
 from lab3 import lab3
+from lab4 import lab4
 
 app = Flask(__name__)
 app.register_blueprint(lab1)
 app.register_blueprint(lab2)
 app.register_blueprint(lab3)
+app.register_blueprint(lab4)
 
 
 # список логов
@@ -298,6 +300,7 @@ def index():
             <a href="/lab1">Первая лабораторная</a><br>
             <a href="/lab2">Вторая лабораторная</a><br>
             <a href="/lab3">Третья лабораторная</a><br>
+            <a href="/lab4">Четвертая лабораторная</a><br>
         </nav>
         <footer>
             Гундарева Анжела, ФБИ-31, 3 курс, 2025
