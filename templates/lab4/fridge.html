@@ -14,7 +14,7 @@
 {% if error %}
     <p class="error">{{ error }}</p>
 {% elif temp is defined %}
-    <p class="success">Установлена температура: {{ temp }}°C</p>
+    <p >Установлена температура: {{ temp }}°C</p>
     <div class="snowflakes">
         {% for i in range(snowflakes) %}
             <span class="flake">❄️</span>
@@ -24,6 +24,12 @@
 
 
 <style>
+    h1 {
+        color: #ff1493;
+        text-align: center;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.2);
+    }
     .fridge-form {
         background: #ffe6f2;
         padding: 30px;
@@ -60,7 +66,7 @@
         text-align: center;
         font-size: 16px;
     }
-    .success {
+    P {
         color: #ff3399;
         font-weight: bold;
         margin-top: 15px;

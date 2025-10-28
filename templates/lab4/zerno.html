@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block number_lab %}Лабораторная работа 4{% endblock %}
+
+{% block main %}
+    
+    <form method="post">
+        <h1>Заказ зерна</h1>
+        <div>
+            <label for="zerno">Выберите зерно:</label>
+            <select id="zerno" name="zerno" required>
+                <option value="">    Выберите зерно   </option>
+                <option value="ячмень">Ячмень</option>
+                <option value="овёс">Овёс</option>
+                <option value="пшеница">Пшеница</option>
+                <option value="рожь">Рожь</option>
+            </select>
+        </div>
+        <div>
+            <label for="ves">Укажите вес (в тоннах):</label>
+            <input id="ves" name="ves" type="number" step="0.1" min="0.1" required>
+        </div>
+        <div>
+            <button type="submit">Оформить заказ</button>
+        </div>
+
+        {% if error %}
+            <div >
+                {{ error }}
+            </div>
+        {% endif %}
+
+        {% if success %}
+            <div >
+                <p><strong>Заказ успешно сформирован</strong></p>
+                <p>Вы заказали: {{ zerno }}</p>
+                <p>Вес: {{ ves }} т</p>
+                <p>Сумма к оплате: {{ itog|int }} руб</p>
+            </div>
+
+            {% if discount > 0 %}
+                <div>
+                    <p><strong>Применена скидка 10% за большой объём</strong></p>
+                    <p>Размер скидки: {{ discount|int }} руб</p>
+                </div>
+            {% endif %}
+        {% endif %}        
+    </form>
+
+    <style>
+        h1 {
+        color: #ff1493;
+        text-align: center;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.2);
+        }
+        
+        form {
+            background: #ffe6f2;
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+            gap: 10px;
+            margin: 20px auto;
+            }
+        form label {
+            font-weight: 600;
+            color: #cc0066;
+        }
+        form select, form input {
+            padding: 6px;
+            border-radius: 6px;
+            border: 1px solid #ff99cc;
+        }
+        form button {
+            background-color: #ff66b2;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        form button:hover {
+            background-color: #ff3399;
+        }
+</style>
+{% endblock %}
