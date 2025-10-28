@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block lab %}Холодильник{% endblock %}
+
+{% block main %}
+<h1>Холодильник</h1>
+<p>Введите температуру (в °C):</p>
+
+<form method="post" class="fridge-form">
+    <input type="number" name="temperature" >
+    <button type="submit">Установить</button>
+</form>
+
+{% if error %}
+    <p class="error">{{ error }}</p>
+{% elif temp is defined %}
+    <p class="success">Установлена температура: {{ temp }}°C</p>
+    <div class="snowflakes">
+        {% for i in range(snowflakes) %}
+            <span class="flake">❄️</span>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+<style>
+    .fridge-form {
+        background: #ffe6f2;
+        padding: 30px;
+        border-radius: 15px;
+        width: fit-content;
+        margin: 20px auto;
+        text-align: center;
+    }
+    .fridge-form input {
+        padding: 10px;
+        border-radius: 8px;
+        border: 2px solid #ff99cc;
+        margin-right: 12px;
+        font-size: 16px;
+        width: 120px;
+    }
+    .fridge-form button {
+        background-color: #ff66b2;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .fridge-form button:hover {
+        background-color: #ff3399;
+    }
+    .error {
+        color: #cc0066;
+        font-weight: bold;
+        font-style: italic;
+        margin-top: 15px;
+        text-align: center;
+        font-size: 16px;
+    }
+    .success {
+        color: #ff3399;
+        font-weight: bold;
+        margin-top: 15px;
+        text-align: center;
+        font-size: 18px;
+    }
+    .snowflakes {
+        font-size: 50px;
+        color: #ff66b2;
+        margin-top: 20px;
+        text-align: center;
+    }
+    .flake {
+        margin: 0 8px;
+    }
+</style>
+
+{% endblock %}
