@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block lab %}Список пользователей{% endblock %}
+
+{% block main %}
+    <h1>Список пользователей</h1>
+
+    <table class="users-table">
+        <tr>
+            <th>Имя</th>
+            <th>Логин</th>
+            <th>Пол</th>
+            <th>Действия</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.name }}</td>
+            <td>{{ user.login }}</td>
+            <td>{{ user.gender }}</td>
+            <td>
+                {% if user.login == current_user %}
+                    <form action="/lab4/edit/{{ user.login }}" method="get" style="display:inline;">
+                        <button class="edit-btn">Редактировать</button>
+                    </form>
+                    <form action="/lab4/delete/{{ user.login }}" method="post" style="display:inline;">
+                        <button class="del-btn">Удалить</button>
+                    </form>
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+<div style="margin-top: 20px;">
+        <a href="/lab4" class="back-btn">← Назад </a>
+    </div>
+<style>
+    .back-btn {
+        display: inline-block;
+        margin-top: 10px;
+        background: linear-gradient(45deg, #ff69b4, #ff1493);
+        color: white;
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: 0.3s ease;
+        box-shadow: 0 4px 12px rgba(255, 105, 180, 0.3);
+    }
+    .back-btn:hover {
+        background: linear-gradient(45deg, #ff1493, #ff69b4);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(255, 105, 180, 0.5);
+    }
+    .users-table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+        background: linear-gradient(135deg, #fff0f5, #ffe4ec);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(255, 105, 180, 0.2);
+    }
+    .users-table th {
+        background: linear-gradient(45deg, #ff69b4, #ff1493);
+        color: white;
+        padding: 12px 15px;
+        text-align: left;
+        font-weight: bold;
+    }
+    .users-table td {
+        border-bottom: 1px solid #ffd6e7;
+        padding: 12px 15px;
+        background: rgba(255, 255, 255, 0.8);
+    }
+    .users-table tr:hover td {
+        background: rgba(255, 240, 245, 0.9);
+    }
+    .edit-btn {
+        background: linear-gradient(45deg, #ffb6c1, #ff69b4);
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s ease;
+        box-shadow: 0 3px 8px rgba(255, 105, 180, 0.3);
+    }
+    .edit-btn:hover {
+        background: linear-gradient(45deg, #ff69b4, #ffb6c1);
+        transform: translateY(-1px);
+        box-shadow: 0 5px 12px rgba(255, 105, 180, 0.4);
+    }
+    .del-btn {
+        background: linear-gradient(45deg, #ff6b8b, #ff4757);
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s ease;
+        box-shadow: 0 3px 8px rgba(255, 107, 107, 0.3);
+    }
+    .del-btn:hover {
+        background: linear-gradient(45deg, #ff4757, #ff6b8b);
+        transform: translateY(-1px);
+        box-shadow: 0 5px 12px rgba(255, 107, 107, 0.4);
+    }
+    h1 {
+        color: #ff1493;
+        text-align: center;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.2);
+    }
+    body {
+        background: linear-gradient(45deg, #fff0f5, #ffe4ec);
+        font-family: 'Arial', sans-serif;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+    }
+</style>
+{% endblock %}

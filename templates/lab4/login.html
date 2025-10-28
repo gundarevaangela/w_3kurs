@@ -5,7 +5,7 @@
     {% if authorized %} 
         <<h1>
             {% if name %}
-                Добро пожаловать, {{ name }} {{gender}}!
+                Добро пожаловать, {{ name }}!
             {% else %}
                 Добро пожаловать, {{ login }}!
             {% endif %}
@@ -35,7 +35,11 @@
                 <button type="submit">Войти</button>
                 <button type="reset">Отмена</button>
             </div>
+            <p>Нет аккаунта? <a href="/lab4/register">Зарегистрируйтесь</a></p>
         </form>
+    <div style="margin-top: 20px;">
+        <a href="/lab4" class="back-btn">← Назад</a>
+</div>
     {% endif %}
 
 
