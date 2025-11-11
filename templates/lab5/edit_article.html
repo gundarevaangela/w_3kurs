@@ -19,6 +19,20 @@
             </label>
             <textarea name="article_text" class="form-textarea" required>{{ article['article_text'] }}</textarea>
         </div>
+
+        <div class="form-checkboxes">
+            <div class="checkbox-group">
+                <input type="checkbox" name="is_favorite" id="is_favorite" class="checkbox"
+                       {% if article['is_favorite'] %}checked{% endif %}>
+                <label for="is_favorite" class="checkbox-label"> Добавить в избранное</label>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" name="is_public" id="is_public" class="checkbox"
+                       {% if article['is_public'] %}checked{% endif %}>
+                <label for="is_public" class="checkbox-label"> Сделать публичной</label>
+            </div>
+        </div>
         
         <div class="form-group">
             <button type="submit" class="form-button">Сохранить изменения</button>
@@ -51,6 +65,34 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+        }
+
+        .form-checkboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            border: 1px solid #ff99cc;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: #ff1493;
+        }
+
+        .checkbox-label {
+            color: #c71585;
+            font-weight: bold;
+            cursor: pointer;
         }
 
         .form-label {
