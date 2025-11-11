@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{% block main %}
+    <div class="articles-container">
+        <h1>Статьи</h1>
+        
+        {% for article in articles %}
+            <div class="article-card">
+                <h2 class="article-title">{{ article['title'] }}</h2>
+                <div class="article-content">
+                    <p class="article-text">{{ article['article_text'] }}</p>
+                </div>
+            </div>
+        {% endfor %}
+        
+        {% if not articles %}
+            <div class="no-articles">
+                <p>Пока нет статей</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <style>
+        .articles-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #ff1493;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.2);
+        }
+
+        .article-card {
+            background: linear-gradient(135deg, #ffd6e7, #ffb6c1);
+            border: 2px solid #ff69b4;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.3);
+        }
+
+        .article-title {
+            color: #c71585;
+            margin-bottom: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 2px solid #ff99cc;
+            padding-bottom: 10px;
+        }
+
+        .article-content {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #ff99cc;
+        }
+
+        .article-text {
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            font-size: 16px;
+            white-space: pre-line;
+        }
+
+        .no-articles {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #ffd6e7, #ffb6c1);
+            border-radius: 15px;
+            border: 2px solid #ff69b4;
+        }
+
+        .no-articles p {
+            color: #c71585;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        main {
+            min-height: 80vh;
+            padding: 20px;
+        }
+    </style>
+{% endblock %}
