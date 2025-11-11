@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{% block main %}
+    <h1>Flask и БД</h1>
+    
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 20px;">
+        <div style="flex: 1;"></div>
+        
+        <ul class="tab-list" style="margin: 0 auto;">
+            <li><a href="/lab4/login">Вход</a></li>
+            <li><a href="/lab4/register">Регистрация</a></li>
+            <li><a href="/lab4/list">Список статей</a></li>
+            <li><a href="/lab4/create">Создать статью</a></li>
+        </ul>
+        
+        <div style="flex: 1; display: flex; justify-content: flex-end;">
+            <span class="username">{{ login or "anonim" }}</span>
+        </div>
+    </div>
+
+    <style>
+        .tab-list {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            gap: 10px;
+        }
+        
+        .tab-list li {
+            background: #ffebf3;
+            border: 1px solid #ffb6d5;
+            border-radius: 8px;
+        }
+        
+        .tab-list a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #c41d7f;
+            font-weight: 500;
+        }
+        
+        .tab-list a:hover {
+            background: #ffd1e6;
+            color: #a11666;
+        }
+        
+        .username {
+            background: #ffebf3;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid #ffb6d5;
+            color: #c41d7f;
+            font-weight: 500;
+        }
+    </style>
+{% endblock %}
