@@ -7,12 +7,14 @@
         <h1>Зарегистрированные пользователи</h1>
         
         <div class="users-list">
-            {% for user in users %}
-                <div class="user-card">
-                    <div class="user-login">{{ user['login'] }}</div>
-                    <div class="user-name">{{ user['name'] or 'Не указано' }}</div>
-                </div>
-            {% endfor %}
+            <ul>
+                {% for u in users %}
+                    <li>
+                        <strong>{{ u['login'] }}</strong> 
+                        <span class="user-name">{{ u['name'] or '(имя не указано)' }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
         
         <div class="back-link">
@@ -35,36 +37,41 @@
         }
 
         .users-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
             margin-bottom: 30px;
         }
 
-        .user-card {
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
             background: linear-gradient(135deg, #ffd6e7, #ffb6c1);
             border: 2px solid #ff69b4;
             border-radius: 15px;
             padding: 20px;
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
         }
 
-        .user-login {
+        li strong {
             color: #c71585;
             font-weight: bold;
-            font-size: 18px;
         }
 
         .user-name {
-            color: #333;
-            font-size: 16px;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 8px 12px;
+            background: rgba(245, 141, 167, 0.897);
+            padding: 8px 16px;
             border-radius: 8px;
-            border: 1px solid #ff99cc;
+            border: 2px solid #ff99cc;
+            color: #333;
+            font-weight: normal;
         }
 
         .back-link {

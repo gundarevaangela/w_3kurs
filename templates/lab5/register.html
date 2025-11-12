@@ -3,54 +3,55 @@
 {% block lab %}Лабораторная работа 5{% endblock %}
 
 {% block main %}
-    <h1>Регистрация</h1>
-    <form action="/lab5/register" method="post" class="reg-form">
-        <label>Логин:</label>
-        <input type="text" name="login" required>
+    <div class="profile-container">
+        <h1>Регистрация</h1>
+        
+        <form action="/lab5/register" method="post" class="profile-form">
+            <div class="form-group">
+                <label class="form-label">Логин:</label>
+                <input type="text" name="login" value="{{ login or '' }}" class="form-input" placeholder="Введите логин" required>
+            </div>
 
-        <label>Пароль:</label>
-        <input type="password" name="password" required>
+            <div class="form-group">
+                <label class="form-label">Имя:</label>
+                <input type="text" name="name" value="{{ name or '' }}" class="form-input" placeholder="Введите ваше имя">
+            </div>
 
-        <label>Подтверждение пароля:</label>
-        <input type="password" name="confirm_password" required>
+            <div class="form-group">
+                <label class="form-label">Пароль:</label>
+                <input type="password" name="password" class="form-input" placeholder="Введите пароль" required>
+            </div>
 
-        <label>Имя:</label>
-        <input type="text" name="name">
+            <button type="submit" class="form-button">Зарегистрироваться</button>
+        </form>
 
-        <button type="submit">Зарегистрироваться</button>
-    </form>
-
-    {% if error %}
-    <p class="error">{{ error }}</p>
-    {% endif %}
-    <div style="margin-top: 20px;">
-        <a href="/lab5" class="back-btn">← Назад</a>
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+        
+        <div class="back-link">
+            <a href="/lab5" class="back-btn">← Назад</a>
+        </div>
     </div>
 
-    
     <style>
-        .back-btn {
-            display: inline-block;
-            margin-top: 10px;
-            background: linear-gradient(45deg, #ff69b4, #ff1493);
-            color: white;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: 0.3s ease;
-            box-shadow: 0 4px 12px rgba(255, 105, 180, 0.3);
+        .profile-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
         }
-        .back-btn:hover {
-            background: linear-gradient(45deg, #ff1493, #ff69b4);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(255, 105, 180, 0.5);
-        }    
-        .reg-form {
+
+        h1 {
+            color: #ff1493;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.2);
+        }
+
+        .profile-form {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            width: 350px;
+            gap: 20px;
             background: linear-gradient(135deg, #ffd6e7, #ffb6c1);
             padding: 30px;
             border-radius: 15px;
@@ -58,41 +59,42 @@
             box-shadow: 0 8px 25px rgba(255, 105, 180, 0.3);
             border: 2px solid #ff69b4;
         }
-        .reg-form label {
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
             color: #c71585;
             font-weight: bold;
-            margin-bottom: 5px;
+            font-size: 16px;
         }
-        .reg-form input {
-            padding: 10px;
+
+        .form-input {
+            padding: 12px;
             border: 2px solid #ff99cc;
             border-radius: 8px;
             background: #fffafc;
             font-size: 14px;
             transition: all 0.3s ease;
+            font-family: inherit;
         }
-        .reg-form input:focus {
+
+        .form-input:focus {
             border-color: #ff1493;
             background: #fff0f5;
             outline: none;
             box-shadow: 0 0 8px rgba(255, 20, 147, 0.3);
         }
-        .error {
-            color: #d6006b;
-            margin-top: 10px;
-            font-weight: bold;
-            text-align: center;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 8px;
-            border-left: 4px solid #ff1493;
-        }
-        button {
+
+        .form-button {
             background: linear-gradient(45deg, #ff69b4, #ff1493);
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 12px;
+            padding: 14px 24px;
             cursor: pointer;
             font-weight: bold;
             font-size: 16px;
@@ -100,23 +102,47 @@
             box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4);
             margin-top: 10px;
         }
-        button:hover {
+
+        .form-button:hover {
             background: linear-gradient(45deg, #ff1493, #ff69b4);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(255, 105, 180, 0.6);
         }
-        h1 {
-            color: #ff1493;
+
+        .error {
+            color: #d6006b;
+            margin-top: 10px;
+            font-weight: bold;
             text-align: center;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.2);
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            border-left: 4px solid #ff1493;
         }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(45deg, #ff1493, #ff69b4);
+            transform: translateY(-2px);
+        }
+
         main {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 60vh;
+            min-height: 80vh;
             padding: 20px;
         }
     </style>
