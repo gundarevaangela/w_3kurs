@@ -3,6 +3,155 @@
 {% block lab %}Лабораторная работа 6{% endblock %}
 
 {% block script %}
+<style>
+    .lab6-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 25px;
+        background: #fff8f8;
+        border-radius: 12px;
+        border: 2px solid #ffd1dc;
+    }
+
+    h1 {
+        color: #d63384;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 32px;
+        padding: 15px;
+        background: #fff0f5;
+        border-radius: 10px;
+        border: 2px dashed #ffb6c1;
+    }
+
+    #office-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    #office-list li {
+        background: white;
+        padding: 18px 20px;
+        margin-bottom: 15px;
+        border-radius: 12px;
+        border: 2px solid #ffd1dc;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+
+    #office-list li:hover {
+        border-color: #ff85a2;
+        transform: translateX(5px);
+    }
+
+    #office-list li.occupied {
+        background: #fffaf0;
+        border-left: 6px solid #ffd700;
+        border-right: 2px solid #ffd700;
+    }
+
+    #office-list li.free {
+        background: #fff0f5;
+        border-left: 6px solid #ff69b4;
+        border-right: 2px solid #ff69b4;
+    }
+
+    .office-info {
+        font-size: 17px;
+        color: #c2185b;
+        font-weight: 500;
+    }
+
+    .office-number {
+        font-weight: bold;
+        color: #ff1493;
+        font-size: 18px;
+    }
+
+    .office-price {
+        color: #ff8c00;
+        font-weight: bold;
+        background: #fffaf0;
+        padding: 4px 8px;
+        border-radius: 6px;
+        border: 1px solid #ffd700;
+    }
+
+    #office-list button {
+        background: #ff69b4;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        min-width: 140px;
+    }
+
+    #office-list button:hover {
+        background: #ff1493;
+        box-shadow: 0 4px 12px rgba(255, 20, 147, 0.3);
+    }
+
+    #office-list button.cancel-btn {
+        background: #ffd700;
+        color: #8b4513;
+        border: 1px solid #ffc400;
+    }
+
+    #office-list button.cancel-btn:hover {
+        background: #ffed4e;
+        color: #654321;
+        box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+    }
+
+    #total-cost {
+        background: #fff0f5;
+        padding: 20px;
+        border-radius: 12px;
+        border: 2px solid #ffb6c1;
+        margin-top: 30px;
+        font-size: 22px;
+        font-weight: bold;
+        text-align: center;
+        color: #d63384;
+    }
+
+    .total-amount {
+        color: #ff69b4;
+        background: #fffaf0;
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1px solid #ffd700;
+    }
+
+    .stats-bar {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px 0;
+        padding: 15px;
+        background: #fff0f5;
+        border-radius: 10px;
+        border: 1px solid #ffd1dc;
+    }
+
+    .stat-item {
+        text-align: center;
+        color: #d63384;
+    }
+
+    .stat-value {
+        font-weight: bold;
+        font-size: 20px;
+        color: #ff69b4;
+    }
+</style>
+
 <script>
     function getOfficeList() {
         const url = '/lab6/json-rpc-api/';
@@ -25,35 +174,75 @@
             ul.innerHTML = '';
             
             let totalCost = 0;
+            let occupiedCount = 0;
             
             for(let i = 0; i<office_list.length; i++) {
                 const office = office_list[i];
                 const li = document.createElement('li');
-                li.innerText = `${office.number}: ${office.tenant || 'свободен'} - ${office.price} руб./мес.`;
+                
+                if (office.tenant) {
+                    li.className = 'occupied';
+                    occupiedCount++;
+                } else {
+                    li.className = 'free';
+                }
+
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'office-info';
+                infoDiv.innerHTML = `<span class="office-number">Офис ${office.number}</span>: ${office.tenant || 'свободен'} - <span class="office-price">${office.price} руб./мес.</span>`;
+                li.appendChild(infoDiv);
 
                 if (!office.tenant) {
-                const bookingButton = document.createElement('button');
-                bookingButton.innerText = 'зарезервировать';
-                bookingButton.onclick = function() {booking(office.number)};
-                li.appendChild(bookingButton);
+                    const bookingButton = document.createElement('button');
+                    bookingButton.innerText = 'Забронировать';
+                    bookingButton.onclick = function() {booking(office.number)};
+                    li.appendChild(bookingButton);
                 } 
                 else {
                     const cancellationButton = document.createElement('button');
-                    cancellationButton.innerText = 'освободить';
+                    cancellationButton.className = 'cancel-btn';
+                    cancellationButton.innerText = 'Освободить';
                     cancellationButton.onclick = function() {cancellation(office.number)};
                     li.appendChild(cancellationButton);
                     
-                    // Добавляем стоимость арендованного офиса к общей сумме
                     totalCost += office.price;
                 }
 
                 ul.appendChild(li);
             }
             
-            // Обновляем отображение общей стоимости
-            const totalElement = document.getElementById('total-cost');
-            totalElement.innerText = `Общая стоимость аренды: ${totalCost} руб./мес.`;
+            // Обновляем статистику
+            updateStats(occupiedCount, office_list.length, totalCost);
         });
+    }
+
+    function updateStats(occupied, total, cost) {
+        const totalElement = document.getElementById('total-cost');
+        totalElement.innerHTML = `Общая стоимость аренды: <span class="total-amount">${cost} руб./мес.</span>`;
+        
+        // Создаем или обновляем статистику
+        let statsBar = document.getElementById('stats-bar');
+        if (!statsBar) {
+            statsBar = document.createElement('div');
+            statsBar.id = 'stats-bar';
+            statsBar.className = 'stats-bar';
+            document.querySelector('.lab6-container').insertBefore(statsBar, document.getElementById('office-list'));
+        }
+        
+        statsBar.innerHTML = `
+            <div class="stat-item">
+                <div class="stat-value">${occupied}</div>
+                <div>арендовано</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">${total - occupied}</div>
+                <div>свободно</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">${total}</div>
+                <div>всего офисов</div>
+            </div>
+        `;
     }
 
     function cancellation(officeNumber) {
@@ -90,7 +279,6 @@
                 }
             }
             else {
-                document.getElementById('office-list').innerHTML = '';
                 getOfficeList();
             }
         })
@@ -127,7 +315,6 @@
                 }
             }
             else {
-                document.getElementById('office-list').innerHTML = '';
                 getOfficeList();
             }
         });
@@ -140,9 +327,11 @@
 {% endblock %}
 
 {% block main %}
-    <h1>Список кабинетов</h1>
-    <ul id="office-list"></ul>
-    <div id="total-cost" style="font-weight: bold; margin-top: 20px; font-size: 1.2em;">
-        Общая стоимость аренды: 0 руб./мес.
+    <div class="lab6-container">
+        <h1>Список кабинетов</h1>
+        <ul id="office-list"></ul>
+        <div id="total-cost">
+            Общая стоимость аренды: <span class="total-amount">0 руб./мес.</span>
+        </div>
     </div>
 {% endblock %}
