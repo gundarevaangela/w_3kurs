@@ -4,17 +4,18 @@ lab6 = Blueprint('lab6', __name__)
 
 offices = []
 for i in range(1, 11):
-    offices.append({"number": i, "tenant": ""})
+    offices.append({"number": i, "tenant": "", "price": 900 + i%3})
 
 @lab6.route("/lab6/")
 def main():
     return render_template('lab6/lab6.html')
 
-
 @lab6.route('/lab6/json-rpc-api/', methods = ['POST'])
 def api():
     data = request.json
     id = data['id']
+    
+    # Метод info доступен без авторизации
     if data['method'] == 'info':
         return {
             'jsonrpc': '2.0',
@@ -22,10 +23,11 @@ def api():
             'id': id
         }
     
+    # Для остальных методов проверяем авторизацию
     login = session.get('login')
     if not login:
         return {
-            'jsonprc': '2.0',
+            'jsonrpc': '2.0',  
             'error': {
                 'code': 1,
                 'message': 'Unauthorized'
@@ -52,6 +54,39 @@ def api():
                     'result': 'success',
                     'id': id
                 }
+    
+    if data['method'] == 'cancellation':
+        office_number = data['params']
+        
+        for office in offices:
+            if office['number'] == office_number:
+                if not office['tenant']:
+                    return {
+                        'jsonrpc': '2.0',
+                        'error': {
+                            'code': 4,
+                            'message': 'Office is not booked'
+                        },
+                        'id': id
+                    }
+                
+                if office['tenant'] != login:
+                   return {
+                        'jsonrpc': '2.0',
+                        'error': {
+                            'code': 5,
+                            'message': 'You can only cancel your own booking'
+                        },
+                        'id': id
+                    } 
+                
+                office['tenant'] = ""
+                return {
+                    'jsonrpc': '2.0',
+                    'result': 'success',
+                    'id': id
+                }
+    
     return {
         'jsonrpc': '2.0',
         'error': {
