@@ -3,7 +3,6 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from werkzeug.security import check_password_hash, generate_password_hash
 import sqlite3
-import os
 from os import path
 
 lab5 = Blueprint('lab5', __name__)

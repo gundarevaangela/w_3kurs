@@ -22,15 +22,15 @@
 
         <div class="form-checkboxes">
             <div class="checkbox-group">
-                <input type="checkbox" name="is_favorite" id="is_favorite" class="checkbox"
-                       {% if article['is_favorite'] %}checked{% endif %}>
-                <label for="is_favorite" class="checkbox-label"> Добавить в избранное</label>
+                <input type="checkbox" name="is_public" id="is_public" class="checkbox"
+                       {% if article['is_public'] in [1,'1',True] %}checked{% endif %}>
+                <label for="is_public" class="checkbox-label"> Сделать публичной</label>
             </div>
             
             <div class="checkbox-group">
-                <input type="checkbox" name="is_public" id="is_public" class="checkbox"
-                       {% if article['is_public'] %}checked{% endif %}>
-                <label for="is_public" class="checkbox-label"> Сделать публичной</label>
+                <input type="checkbox" name="is_favorite" id="is_favorite" class="checkbox"
+                       {% if article['is_favorite'] in [1,'1',True] %}checked{% endif %}>
+                <label for="is_favorite" class="checkbox-label"> Добавить в избранное</label>
             </div>
         </div>
         
