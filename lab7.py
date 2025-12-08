@@ -65,7 +65,8 @@ def put_film(id):
 
     if film['description'] == "":
         return {'description': 'Заполните описание'}, 400
-    
+    if film.get('title', '') == '' and film.get('title_ru', '') != '':
+        film['title'] = film['title_ru']
     films[id] = film
     return films[id]
 
@@ -79,9 +80,8 @@ def add_film():
 
     if not film['title'] and film['title_ru']:
         film['title'] = film['title_ru']
-
-    if film['description'] == "":
-        return {'description': 'Заполните описание'}, 400
+    if film.get('title', '') == '' and film.get('title_ru', '') != '':
+        film['title'] = film['title_ru']
     
     films.append(film)
     return {'id': len(films) - 1}, 201

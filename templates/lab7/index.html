@@ -5,20 +5,164 @@
 {% block script %}
 <script src="{{ url_for('static', filename='lab7/main.js')}}"></script>
 <style>
+    h1 {
+        color: #db3d8a;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+        background-color: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(255, 105, 180, 0.1);
+    }
+
+    thead {
+        background: linear-gradient(135deg, #ff69b4, #ff1493);
+        color: white;
+    }
+
+    th {
+        padding: 15px;
+        text-align: left;
+        font-weight: bold;
+        border-bottom: 2px solid #ff69b4;
+    }
+
+    th:first-child {
+        border-radius: 10px 0 0 0;
+    }
+
+    th:last-child {
+        border-radius: 0 10px 0 0;
+    }
+
+    td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #ffe6f2;
+        color: #333;
+    }
+
+    tbody tr:hover {
+        background-color: #fff0f5;
+    }
+
+    button {
+        background: linear-gradient(to right, #ff69b4, #ff1493);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(255, 105, 180, 0.2);
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(255, 105, 180, 0.3);
+        background: linear-gradient(to right, #ff1493, #db3d8a);
+    }
+
+    button:active {
+        transform: translateY(0);
+    }
+
     .modal {
         display: none;
         z-index: 100;
-        box-shadow: 3px 3px 5px #ffb6c1;
-        background: #ffe6f2;
-        width: 400px;
+        box-shadow: 0 10px 30px rgba(255, 105, 180, 0.2);
+        background: linear-gradient(135deg, #fff0f5 0%, #ffe6f2 100%);
+        border: 2px solid #ff69b4;
+        border-radius: 15px;
+        width: 450px;
         left: 50%;
-        top: 220px;
-        margin-left: -200px;
-        position: absolute;
-        padding: 20px;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        position: fixed;
+        padding: 30px;
     }
+
+    .modal label {
+        display: block;
+        margin-bottom: 15px;
+        color: #db3d8a;
+        font-weight: bold;
+    }
+
+    .modal input[type="text"],
+    .modal input[type="number"],
+    .modal textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 2px solid #ffb6c1;
+        border-radius: 8px;
+        font-size: 14px;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease;
+    }
+
+    .modal input[type="text"]:focus,
+    .modal input[type="number"]:focus,
+    .modal textarea:focus {
+        outline: none;
+        border-color: #ff69b4;
+        box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.1);
+    }
+
+    .modal textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .modal i {
+        font-size: 12px;
+        color: #ff69b4;
+        font-style: italic;
+    }
+
+    .modal-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .modal button {
+        padding: 8px 20px;
+        font-size: 14px;
+    }
+
+    .modal button:last-child {
+        background: linear-gradient(to right, #ccc, #999);
+    }
+
+    .modal button:last-child:hover {
+        background: linear-gradient(to right, #999, #777);
+    }
+
     .error-message {
-        color: red;
+        color: #ff4444;
+        font-size: 12px;
+        margin-top: 5px;
+        font-weight: normal;
+    }
+
+    #film-list tr td:last-child {
+        display: flex;
+        gap: 10px;
+    }
+
+    #film-list tr td:last-child button {
+        padding: 5px 15px;
+        font-size: 14px;
     }
 </style>
 {% endblock %}
@@ -41,34 +185,37 @@
         fillFilmList();
     </script>
 
-    <div>
+    <div style="text-align: center; margin-top: 20px;">
         <button onclick="addFilm()">Добавить фильм</button>
     </div>
-     <div class="modal">
+    
+    <div class="modal">
         <input type="hidden" id="id">
         <label>
             Название фильма на русском:
             <input type="text" id="title-ru">
-        </label><br>
+        </label>
 
         <label>
             Название фильма на оригинальном языке:
             <i>(если фильм русский, то оставьте пустым):</i>
             <input type="text" id="title">
-        </label><br>
+        </label>
 
         <label>
             Год выпуска:
             <input type="number" id="year">
-        </label><br>
+        </label>
 
         <label>
             Описание:
             <textarea id="description"></textarea>
             <div id="description-error" class="error-message"></div>
-        </label><br>
+        </label>
 
-        <button onclick="sendFilm()">OK</button>
-        <button onclick="cancel()">Отмена</button>
+        <div class="modal-buttons">
+            <button onclick="sendFilm()">OK</button>
+            <button onclick="cancel()">Отмена</button>
+        </div>
     </div>
 {% endblock %}

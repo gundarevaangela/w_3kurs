@@ -21,8 +21,9 @@ function fillFilmList() {
             let editButton = document.createElement('button');
             editButton.innerText = 'редактировать'
             editButton.onclick = function() {
-                            editFilm(i);
-                        }
+                editFilm(i);
+            }
+
             let delButton = document.createElement('button');
             delButton.innerText = 'удалить';
             delButton.onclick = function() {
@@ -50,7 +51,6 @@ function deleteFilm(id, title) {
         .then(function () {
             fillFilmList();
         });
-
 }
 
 function showModal() {
@@ -105,7 +105,6 @@ function sendFilm() {
             document.getElementById('description-error').innerText = errors.description;
     });
 }
-
 
 function editFilm(id) {
     fetch(`/lab7/rest-api/films/${id}`)
