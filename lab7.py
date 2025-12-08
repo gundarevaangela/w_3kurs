@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, abort
-
+from datetime import datetime
 lab7 = Blueprint('lab7', __name__)
 
 @lab7.route('/lab7/')
@@ -33,6 +33,50 @@ films = [
     },
 ]
 
+def validate_film(film):
+    """Валидация всех полей фильма"""
+    errors = {}
+    
+    # Проверка русского названия (обязательное поле)
+    title_ru = film.get('title_ru', '').strip()
+    if not title_ru:
+        errors['title_ru'] = 'Заполните русское название'
+    
+    # Проверка оригинального названия
+    title = film.get('title', '').strip()
+    if not title and not title_ru:
+        # Если оба названия пустые
+        errors['title'] = 'Заполните название на оригинальном языке'
+    elif not title:
+        # Если оригинальное пустое, а русское есть - копируем русское
+        film['title'] = title_ru
+    
+    # Проверка года
+    year = film.get('year')
+    if year is None or year == '':
+        errors['year'] = 'Заполните год выпуска'
+    else:
+        try:
+            # Преобразуем в число
+            year_int = int(year)
+            current_year = datetime.now().year
+            if year_int < 1895 or year_int > current_year:
+                errors['year'] = f'Год должен быть от 1895 до {current_year}'
+            else:
+                # Сохраняем как число
+                film['year'] = year_int
+        except (ValueError, TypeError):
+            errors['year'] = 'Год должен быть числом'
+    
+    # Проверка описания
+    description = film.get('description', '').strip()
+    if not description:
+        errors['description'] = 'Заполните описание'
+    elif len(description) > 2000:
+        errors['description'] = 'Описание не должно превышать 2000 символов'
+    
+    return errors
+
 @lab7.route('/lab7/rest-api/films/', methods=['GET'])
 def get_films():
     return films
@@ -57,31 +101,27 @@ def put_film(id):
         abort(404)
     
     film = request.get_json()
-    if film['description'] == '':
-        return {'description': 'Заполните описание'}, 400
-
-    if not film['title'] and film['title_ru']:
-        film['title'] = film['title_ru']
-
-    if film['description'] == "":
-        return {'description': 'Заполните описание'}, 400
-    if film.get('title', '') == '' and film.get('title_ru', '') != '':
-        film['title'] = film['title_ru']
+    if film is None:
+        return {'error': 'Invalid JSON'}, 400
+    
+    # Валидация всех полей
+    errors = validate_film(film)
+    if errors:
+        return errors, 400
+    
     films[id] = film
     return films[id]
-
 
 @lab7.route('/lab7/rest-api/films/', methods=['POST'])
 def add_film():
     film = request.get_json()
-    if film['description'] == '':
-        return {'description': 'Заполните описание'}, 400
-    films.append(film)
-
-    if not film['title'] and film['title_ru']:
-        film['title'] = film['title_ru']
-    if film.get('title', '') == '' and film.get('title_ru', '') != '':
-        film['title'] = film['title_ru']
+    if film is None:
+        return {'error': 'Invalid JSON'}, 400
+    
+    # Валидация всех полей
+    errors = validate_film(film)
+    if errors:
+        return errors, 400
     
     films.append(film)
     return {'id': len(films) - 1}, 201

@@ -152,7 +152,9 @@
         color: #ff4444;
         font-size: 12px;
         margin-top: 5px;
+        margin-bottom: 10px;
         font-weight: normal;
+        min-height: 16px;
     }
 
     #film-list tr td:last-child {
@@ -194,17 +196,20 @@
         <label>
             Название фильма на русском:
             <input type="text" id="title-ru">
+            <div id="title-ru-error" class="error-message"></div>
         </label>
 
         <label>
             Название фильма на оригинальном языке:
             <i>(если фильм русский, то оставьте пустым):</i>
             <input type="text" id="title">
+            <div id="title-error" class="error-message"></div>
         </label>
 
         <label>
             Год выпуска:
             <input type="number" id="year">
+            <div id="year-error" class="error-message"></div>
         </label>
 
         <label>
