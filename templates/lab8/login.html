@@ -2,9 +2,8 @@
 {% block lab %}Лабораторная работа 8{% endblock %}
 
 {% block main %}
-    
     <h1>Вход в систему</h1>
-    <form  action="/lab8/login" method="post">
+    <form action="/lab8/login" method="post">
         <div>
             <label>
                 Логин: <br><input type="text" name="login">
@@ -16,8 +15,39 @@
                 Пароль: <br><input type="password" name="password">
             </label>
         </div>
-        {{ error }}<br>
-        <button type="submit">Вход</button>
+        <div>
+            <label>
+                <input type="checkbox" name="remember"> Запомнить меня
+            </label>
+        </div>
+        {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+        {% endif %}
+        <button type="submit" class="submit-btn">Вход</button>
+        <div class="back">
+            <a href="/lab8">← Назад</a>
+        </div>
     </form>
 
+    <style>
+        h1 { color: #ff1493; text-align: center; }
+        form { max-width: 400px; margin: 0 auto; }
+        label { color: #d63384; font-weight: bold; }
+        input[type="text"], input[type="password"] { 
+            width: 100%; padding: 10px; margin: 8px 0; 
+            border: 2px solid #ffb6d9; border-radius: 8px; 
+            background: #fff9fb; 
+        }
+        input[type="checkbox"] { margin-right: 8px; accent-color: #ff1493; }
+        .error { color: #d63384; font-weight: bold; padding: 10px; background: #ffe6e6; border-radius: 8px; margin: 10px 0; }
+        .submit-btn { 
+            background: #ff1493; color: white; padding: 12px 25px; 
+            border: none; border-radius: 8px; cursor: pointer; 
+            font-weight: bold; width: 100%; margin: 10px 0; 
+        }
+        .back { margin-top: 20px; text-align: center; }
+        .back a { color: #ff1493; text-decoration: none; padding: 8px 16px; border: 1px solid #ffb6d9; border-radius: 5px; }
+    </style>
 {% endblock %}

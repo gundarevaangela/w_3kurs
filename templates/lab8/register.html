@@ -1,25 +1,144 @@
 {% extends "base.html" %}
 
-{% block lab %}Лабораторная работа 8{% endblock %}
+{% block lab %}Лабораторная работа №8{% endblock %}
 
 {% block main %}
-     <h1>Регистрация</h1>
-     <form action="/lab8/register" method="post">
-        <div>
-            <label>
-                Логин: <input  type="text" name="login">
-            </label>
-        </div>
+<style>
+    h1 { 
+        color: #ff1493; 
+        text-align: center; 
+        margin-bottom: 30px;
+    }
+    
+    .form-container { 
+        max-width: 400px; 
+        margin: 0 auto; 
+        padding: 20px;
+    }
+    
+    label { 
+        color: #d63384; 
+        font-weight: bold; 
+        display: block;
+        margin-top: 15px;
+    }
+    
+    .form-input { 
+        width: 100%; 
+        padding: 10px; 
+        margin: 8px 0 20px 0; 
+        border: 2px solid #ffb6d9; 
+        border-radius: 8px; 
+        background: #fff9fb; 
+        box-sizing: border-box;
+        font-size: 16px;
+    }
+    
+    .form-input:focus {
+        outline: none;
+        border-color: #ff1493;
+        box-shadow: 0 0 5px rgba(255, 20, 147, 0.3);
+    }
+    
+    .error { 
+        color: #d63384; 
+        font-weight: bold; 
+        padding: 10px; 
+        background: #ffe6e6; 
+        border-radius: 8px; 
+        margin: 10px 0; 
+        text-align: center;
+    }
+    
+    .submit-btn { 
+        background: #ff1493; 
+        color: white; 
+        padding: 12px 25px; 
+        border: none; 
+        border-radius: 8px; 
+        cursor: pointer; 
+        font-weight: bold; 
+        width: 100%; 
+        margin: 20px 0 10px 0; 
+        font-size: 16px;
+    }
+    
+    .submit-btn:hover {
+        background: #e01185;
+    }
+    
+    .back { 
+        margin-top: 20px; 
+        text-align: center; 
+    }
+    
+    .back a { 
+        color: #ff1493; 
+        text-decoration: none; 
+        padding: 8px 16px; 
+        border: 1px solid #ffb6d9; 
+        border-radius: 5px; 
+        display: inline-block;
+    }
+    
+    .back a:hover {
+        background: #fff0f6;
+    }
+    
+    .login-link {
+        text-align: center;
+        margin-top: 15px;
+        color: #666;
+    }
+    
+    .login-link a {
+        color: #ff1493;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+</style>
 
+<div class="form-container">
+    <h1>Регистрация</h1>
+    
+    <form action="/lab8/register" method="post">
         <div>
-            <label>
-                Пароль: <input  type="password" name="password">
-            </label>
-            <br>
+            <label>Логин:</label>
+            <input type="text" 
+                   name="login" 
+                   class="form-input" 
+                   placeholder="Введите логин"
+                   required>
+        </div>
         
+        <div>
+            <label>Пароль:</label>
+            <input type="password" 
+                   name="password" 
+                   class="form-input" 
+                   placeholder="Введите пароль"
+                   required>
         </div>
-
-        {{ error }}<br>
-        <button  type="submit">Зарегистрироваться</button>
-     </form>
+        
+        {% if error %}
+            <div class="error">
+                {{ error }}
+            </div>
+        {% endif %}
+        
+        <button type="submit" class="submit-btn">Зарегистрироваться</button>
+        
+        <div class="login-link">
+            Уже есть аккаунт? <a href="{{ url_for('lab8.login') }}">Войти</a>
+        </div>
+    </form>
+    
+    <div class="back">
+        <a href="/lab8">← Назад в меню</a>
+    </div>
+</div>
 {% endblock %}

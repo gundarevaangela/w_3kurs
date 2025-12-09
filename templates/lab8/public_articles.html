@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block lab %}Публичные статьи{% endblock %}
+
+{% block main %}
+<style>
+    .search-container {
+        display: flex;
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #ff99cc;
+        background-color: #fff5f9;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        border-radius: 8px;
+    }
+
+    .input-field {
+        flex: 1;
+        padding: 10px;
+        border: 2px solid #ffcce6;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-right: 10px;
+        background: white;
+    }
+
+    .form-button {
+        background-color: #ff66b2;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: 5px;
+        text-decoration: none;
+        width: auto;
+    }
+
+    .form-button:hover {
+        background-color: #ff3385;
+    }
+
+    h1 {
+        color: #cc0066;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        color: #993366;
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    blockquote {
+        background-color: #fff9fb;
+        border-left: 4px solid #ff66b2;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 5px;
+        color: #333;
+    }
+
+    hr {
+        border: none;
+        height: 1px;
+        background-color: #ffcce6;
+        margin: 25px 0;
+    }
+
+    .form-button.secondary {
+        background-color: #ffcce6;
+        color: #660033;
+    }
+
+    .form-button.secondary:hover {
+        background-color: #ffb3d9;
+    }
+</style>
+
+<h1>Публичные статьи</h1>
+
+<!-- Форма поиска -->
+<div class="search-container">
+    <form method="GET" action="{{ url_for('lab8.public_articles') }}" style="display: flex; width: 100%;">
+        <input type="text" name="search" class="input-field" placeholder="Поиск по названию" value="{{ request.args.get('search', '') }}">
+        <button type="submit" class="form-button">Найти</button>
+        {% if request.args.get('search') %}
+            <a href="{{ url_for('lab8.public_articles') }}" class="form-button secondary">Сбросить</a>
+        {% endif %}
+    </form>
+</div>
+
+{% for article in articles %}
+    <h2>{{ article.title }}</h2>
+    <blockquote>{{ article.article_text }}</blockquote>
+    
+    <form method="POST" action="{{ url_for('lab8.like_article', id=article.id) }}">
+        <button type="submit" class="form-button">{{ "Снять лайк" if article.likes == 1 else "Поставить лайк" }}</button> 
+    </form>
+    
+    <hr>
+{% endfor %}
+
+<a href="{{ url_for('lab8.personal_articles') }}" class="form-button secondary">Перейти к личным статьям</a> 
+{% endblock %}

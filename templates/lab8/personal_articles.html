@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block lab %}Личные статьи{% endblock %}
+
+{% block main %}
+<style>
+    .search-container {
+        display: flex;
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #ff99cc;
+        background-color: #fff5f9;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        border-radius: 8px;
+    }
+
+    .input-field {
+        flex: 1;
+        padding: 10px;
+        border: 2px solid #ffcce6;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-right: 10px;
+        background: white;
+    }
+
+    .form-button {
+        background-color: #ff66b2;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: 5px;
+        text-decoration: none;
+        width: auto;
+    }
+
+    .form-button:hover {
+        background-color: #ff3385;
+    }
+
+    h1 {
+        color: #cc0066;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        color: #993366;
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    blockquote {
+        background-color: #fff9fb;
+        border-left: 4px solid #ff66b2;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 5px;
+        color: #333;
+    }
+
+    hr {
+        border: none;
+        height: 1px;
+        background-color: #ffcce6;
+        margin: 25px 0;
+    }
+
+    .form-button.secondary {
+        background-color: #ffcce6;
+        color: #660033;
+    }
+
+    .form-button.secondary:hover {
+        background-color: #ffb3d9;
+    }
+
+    .nav-container {
+        display: inline-flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 15px;
+        border: 2px solid #ff99cc;
+        background-color: #fff5f9;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        border-radius: 8px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .article-container {
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #ffcce6;
+    }
+</style>
+
+<h1>Личные статьи</h1>
+
+<!-- Форма поиска -->
+<div class="search-container">
+    <form method="GET" action="{{ url_for('lab8.personal_articles') }}" style="display: flex; width: 100%;">
+        <input type="text" name="search" class="input-field" placeholder="Поиск по названию" value="{{ request.args.get('search', '') }}">
+        <button type="submit" class="form-button">Найти</button>
+        {% if request.args.get('search') %}
+            <a href="{{ url_for('lab8.personal_articles') }}" class="form-button secondary">Сбросить</a>
+        {% endif %}
+    </form>
+</div>
+
+{% for article in articles %}
+    <div class="article-container">
+        <h2>{{ article.title }}</h2>
+        <blockquote>{{ article.article_text }}</blockquote>
+
+        <!-- Навигационная панель для кнопок для каждой статьи -->
+        <div class="nav-container">
+            <form method="GET" action="{{ url_for('lab8.edit', id=article.id) }}">
+                <button type="submit" class="form-button">Редактировать</button>
+            </form>
+            <form method="POST" action="{{ url_for('lab8.toggle_favorite', id=article.id) }}">
+                <button type="submit" class="form-button">{{ "Убрать из любимых" if article.is_favorite else "Добавить в любимые" }}</button>
+            </form>
+            <form method="POST" action="{{ url_for('lab8.toggle_public', id=article.id) }}">
+                <button type="submit" class="form-button">{{ "Сделать приватной" if article.is_public else "Сделать публичной" }}</button>
+            </form>
+            <form method="POST" action="{{ url_for('lab8.delete', id=article.id) }}">
+                <button type="submit" class="form-button" onclick="return confirm('Вы уверены, что хотите удалить эту статью?');">Удалить</button>
+            </form>
+        </div>
+    </div>
+    <hr>
+{% endfor %}
+
+<a href="{{ url_for('lab8.public_articles') }}" class="form-button secondary">Перейти к публичным статьям</a>  
+<a href="/lab8/" class="form-button secondary">Меню лабораторной</a> 
+{% endblock %}

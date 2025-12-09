@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа №8{% endblock %}
+
+{% block main %}
+<style>
+    label {
+        display: block; /* Метаданные в блоке */
+        margin-bottom: 5px; /* Отступ между меткой и полем ввода */
+    }
+
+    .input-field,
+    textarea {
+        font-size: 16px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box; /* Учитывать padding при расчете ширины */
+        width: 500px; /* Занимает всю доступную ширину */
+        margin-bottom: 10px; /* Отступ между полями ввода */
+    }
+
+    textarea {
+        height: 150px; /* Высота текстового поля */
+    }
+
+    .form-button {
+        background-color: lightblue;
+        border: none;
+        color: black;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;  
+        margin-top: 10px; /* Отступ сверху для кнопки */
+    }
+</style>
+    <h1>Создание статьи</h1>
+    {% if error %}
+        <div style="color: red;">
+            {{ error }}
+        </div>
+    {% endif %}
+    <form method="post">
+        <div>
+            <label for="title">Название статьи:</label>
+            <input type="text" maxlength="50" name="title" required class="input-field"> 
+        </div>
+    
+        <div>
+            <label for="article_text">Текст статьи:</label>
+            <textarea name="article_text" required class="input-field"></textarea> 
+        </div>
+    
+        <div>
+            <button type="submit" class="form-button">Готово</button> 
+        </div>
+        <p> </p>
+        <a href="/lab8/" class="form-button">Меню лабораторной</a> 
+    </form>    
+{% endblock %}

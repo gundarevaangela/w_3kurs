@@ -1,81 +1,117 @@
 {% extends "base.html" %}
 
-{% block lab %}Лабораторная работа 8{% endblock %}
+{% block lab %}Лабораторная работа №8{% endblock %}
 
 {% block main %}
-    <h1>Flask и ORM</h1>
-    
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 20px;">
-        <div style="flex: 1;"></div>
-        
-        <ul class="tab-list" style="margin: 0 auto;">
-            
-             <li><a href="/lab8/login">Вход</a><br>
-            <li><a href="/lab8/register">Регистрация</a><br>
-            <li><a href="/lab8/articles">Список статей</a><br>
-            <li><a href="/lab8/create">Создать статью</a><br>
-          
-        </ul>
-        
-        <div style="flex: 1; display: flex; justify-content: flex-end;">
-            
-            <span class="username">{{ login or "anonim" }}</span>
-            <a href="/lab8/logout">  Выход</a><br>
-            
-        </div>
-    </div>
-
     <style>
-        h1 {
-            color: #ff1493;
-            text-align: center;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.2);
-            font-size: 28px;
-        }
-        .tab-list {
+        nav {
             display: flex;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
         }
         
-        .tab-list li {
-            background: #ffebf3;
-            border: 1px solid #ffb6d5;
-            border-radius: 8px;
+        .nav-buttons {
+            display: flex;
+            align-items: center;
         }
         
-        .tab-list a {
-            display: block;
+        .nav-button {
+            background-color: #ffcce6; 
+            border: 2px solid #ff66b2; 
+            color: #660033; 
             padding: 10px 20px;
-            text-decoration: none;
-            color: #c41d7f;
+            margin-left: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             font-weight: 500;
         }
         
-        .tab-list a:hover {
-            background: #ffd1e6;
-            color: #a11666;
+        .nav-button a {
+            text-decoration: none;
+            color: inherit;
         }
         
-        .username {
-        color: #c41d7f;
-        font-weight: 600;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 8px;
+        .nav-button:hover {
+            background-color: #ff66b2; 
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 102, 178, 0.3);
         }
-
-        .username::before {
-            content: '👤';
-            font-size: 0.9em;
+        
+        .username-container {
+            background-color: #fff0f6;
+            border: 2px solid #ff66b2;
+            border-radius: 5px;
+            padding: 8px 15px;
+            margin-right: 20px;
+            font-weight: bold;
+            color: #660033;
+            box-shadow: 0 2px 4px rgba(255, 102, 178, 0.2);
         }
-
-        .username:hover {
-            color: #eb2f96;
+        
+        .nav-header {
+            background-color: #ffe6f2; 
+            padding: 10px;
+            margin: 0;
+            border: 3px solid #ff99cc;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(255, 153, 204, 0.1);
+        }
+        
+        h1 {
+            color: #cc0066; 
+            text-shadow: 1px 1px 2px rgba(204, 0, 102, 0.1);
+        }
+        
+        .content-block {
+            background-color: #fff5f9; 
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #ff66b2;
         }
     </style>
+    
+    <h1>Flask и ORM</h1>
+    
+    <div class="content-block">
+        <p>В этой лабораторной работе мы познакомимся с другим вариантом работы с
+БД — через ORM (Object Relation Model).</p>
+    </div>
+    
+    <div class="nav-header">
+        <nav>
+            <div class="nav-buttons">
+                <button class="nav-button"><a href="/">Главное меню</a></button>
+                {% if not current_user.is_authenticated %}
+                    <button class="nav-button"><a href="{{ url_for('lab8.login') }}">Войти</a></button>
+                    <button class="nav-button"><a href="{{ url_for('lab8.register') }}">Регистрация</a></button>
+                    <button class="nav-button"><a href="{{ url_for('lab8.public_articles') }}">Публичные статьи</a></button>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                    <button class="nav-button"><a href="{{ url_for('lab8.create') }}">Создать статью</a></button>
+                    <button class="nav-button"><a href="{{ url_for('lab8.personal_articles') }}">Личные статьи</a></button>
+                    <button class="nav-button"><a href="{{ url_for('lab8.public_articles') }}">Публичные статьи</a></button>
+                
+                {% endif %}
+            </div>
+            
+            <div class="username-container">
+                {{ current_user.login if current_user.is_authenticated else 'Анонимус' }}
+                {% if current_user.is_authenticated %}
+                    <form action="{{ url_for('lab8.logout') }}" method="post" style="display: inline; margin-left: 10px;">
+                        <button type="submit" style="background: none; border: none; color: #ff0066; cursor: pointer; font-size: 12px;">
+                            (выйти)
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+        </nav>
+    </div>
+    
+    <p></p>
 {% endblock %}
