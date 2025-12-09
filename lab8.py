@@ -1,3 +1,4 @@
+
 from flask import Blueprint, request, redirect, render_template, flash, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 from db import db
@@ -57,9 +58,7 @@ def login():
     
     login_form = request.form.get('login')
     password_form = request.form.get('password')
-    remember_me = False
-    if request.form.get('remember'):
-        remember_me = True
+    remember_me = 'remember' in request.form
 
     if not login_form:
         return render_template('lab8/login.html', error='Имя пользователя не должно быть пустым')

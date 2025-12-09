@@ -5,58 +5,98 @@
 {% block main %}
 <style>
     label {
-        display: block; /* Метаданные в блоке */
-        margin-bottom: 5px; /* Отступ между меткой и полем ввода */
+        display: block;
+        margin-bottom: 8px;
+        color: #660033;
+        font-weight: 500;
     }
 
     .input-field,
     textarea {
         font-size: 16px;
-        padding: 10px;
-        border: 1px solid #ccc;
+        padding: 12px;
+        border: 2px solid #ffcce6;
         border-radius: 5px;
-        box-sizing: border-box; /* Учитывать padding при расчете ширины */
-        width: 500px; /* Занимает всю доступную ширину */
-        margin-bottom: 10px; /* Отступ между полями ввода */
+        box-sizing: border-box;
+        width: 500px;
+        margin-bottom: 20px;
+        background: white;
+    }
+
+    .input-field:focus,
+    textarea:focus {
+        outline: none;
+        border-color: #ff66b2;
+        box-shadow: 0 0 5px rgba(255, 102, 178, 0.3);
     }
 
     textarea {
-        height: 150px; /* Высота текстового поля */
+        height: 150px;
+        resize: vertical;
     }
 
     .form-button {
-        background-color: lightblue;
+        background-color: #ff66b2;
         border: none;
-        color: black;
-        padding: 10px 20px;
+        color: white;
+        padding: 12px 25px;
         font-size: 16px;
         border-radius: 5px;
         cursor: pointer;
         text-decoration: none;  
-        margin-top: 10px; /* Отступ сверху для кнопки */
+        margin-top: 10px;
+        display: inline-block;
+        font-weight: 500;
+    }
+
+    .form-button:hover {
+        background-color: #ff3385;
+    }
+
+    .form-button.secondary {
+        background-color: #ffcce6;
+        color: #660033;
+    }
+
+    .form-button.secondary:hover {
+        background-color: #ffb3d9;
+    }
+
+    h1 {
+        color: #cc0066;
+        margin-bottom: 25px;
+    }
+
+    .error-message {
+        background-color: #ffe6e6;
+        color: #cc0000;
+        padding: 12px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        border-left: 4px solid #ff6666;
     }
 </style>
     <h1>Создание статьи</h1>
     {% if error %}
-        <div style="color: red;">
+        <div class="error-message">
             {{ error }}
         </div>
     {% endif %}
     <form method="post">
         <div>
             <label for="title">Название статьи:</label>
-            <input type="text" maxlength="50" name="title" required class="input-field"> 
+            <input type="text" maxlength="50" name="title" required class="input-field" placeholder="Введите название статьи"> 
         </div>
     
         <div>
             <label for="article_text">Текст статьи:</label>
-            <textarea name="article_text" required class="input-field"></textarea> 
+            <textarea name="article_text" required class="input-field" placeholder="Введите текст статьи"></textarea> 
         </div>
     
         <div>
             <button type="submit" class="form-button">Готово</button> 
         </div>
         <p> </p>
-        <a href="/lab8/" class="form-button">Меню лабораторной</a> 
+        <a href="/lab8/" class="form-button secondary">Меню лабораторной</a> 
     </form>    
 {% endblock %}
