@@ -12,7 +12,8 @@ lab8 = Blueprint('lab8', __name__)
 
 @lab8.route("/lab8/")
 def lab():
-    return render_template('lab8/lab8.html')
+    login = current_user.login if current_user.is_authenticated else None
+    return render_template('lab8/lab8.html', login=login)
 
 @lab8.route('/lab8/register/', methods = ['GET', 'POST'])
 def register():
@@ -48,10 +49,10 @@ def login():
     password_form = request.form.get('password')
 
     if not login_form:
-        return render_template('lab8/register.html', error='Имя пользователя не должно быть пустым')
+        return render_template('lab8/login.html', error='Имя пользователя не должно быть пустым')
     
     if not password_form:
-        return render_template('lab8/register.html', error='Пароль не должен быть пустым')
+        return render_template('lab8/login.html', error='Пароль не должен быть пустым')
 
     user = users.query.filter_by(login = login_form).first()
 
