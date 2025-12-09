@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <h1>Flask и ORM</h1>
+    
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 20px;">
+        <div style="flex: 1;"></div>
+        
+        <ul class="tab-list" style="margin: 0 auto;">
+            
+             <li><a href="/lab8/login">Вход</a><br>
+            <li><a href="/lab8/register">Регистрация</a><br>
+            <li><a href="/lab8/articles">Список статей</a><br>
+            <li><a href="/lab8/create">Создать статью</a><br>
+          
+        </ul>
+        
+        <div style="flex: 1; display: flex; justify-content: flex-end;">
+            <span class="username">{{ login or "anonim" }}</span>
+        </div>
+    </div>
+
+    <style>
+        h1 {
+            color: #ff1493;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.2);
+            font-size: 28px;
+        }
+        .tab-list {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            gap: 10px;
+        }
+        
+        .tab-list li {
+            background: #ffebf3;
+            border: 1px solid #ffb6d5;
+            border-radius: 8px;
+        }
+        
+        .tab-list a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #c41d7f;
+            font-weight: 500;
+        }
+        
+        .tab-list a:hover {
+            background: #ffd1e6;
+            color: #a11666;
+        }
+        
+        .username {
+        color: #c41d7f;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 8px;
+        }
+
+        .username::before {
+            content: '👤';
+            font-size: 0.9em;
+        }
+
+        .username:hover {
+            color: #eb2f96;
+        }
+    </style>
+{% endblock %}
