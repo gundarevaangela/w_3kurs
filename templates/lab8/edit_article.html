@@ -4,65 +4,151 @@
 
 {% block main %}
 <style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #ffe6f2 0%, #ffccdd 100%);
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #d63384;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 3px solid #ff85a2;
+        font-size: 28px;
+    }
+
+    .form-container {
+        max-width: 700px;
+        margin: 30px auto;
+        padding: 30px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(214, 51, 132, 0.1);
+        border: 2px solid #ffb6d9;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
     label {
-        display: block; /* Метаданные в блоке */
-        margin-bottom: 5px; /* Отступ между меткой и полем ввода */
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #c41d7f;
+        font-size: 16px;
     }
 
     .input-field,
     textarea {
-        font-size: 25px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box; /* Учитывать padding при расчете ширины */
-        width: 500px; /* Занимает всю доступную ширину */
-        margin-bottom: 10px; /* Отступ между полями ввода */
+        width: 100%;
+        padding: 14px;
+        font-size: 16px;
+        border: 2px solid #ffb6d9;
+        border-radius: 8px;
+        box-sizing: border-box;
+        background: #fff9fb;
+        transition: all 0.3s;
+    }
+
+    .input-field:focus,
+    textarea:focus {
+        outline: none;
+        border-color: #ff4d94;
+        box-shadow: 0 0 0 3px rgba(255, 77, 148, 0.2);
+        background: white;
     }
 
     textarea {
-        height: 150px; /* Высота текстового поля */
+        height: 200px;
+        resize: vertical;
     }
 
-    .form-button {
-        background-color: lightblue;
+    .error-message {
+        background: #ffe6f0;
+        color: #d63384;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid #ff4d94;
+        font-weight: bold;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 14px 30px;
         border: none;
-        color: black;
-        padding: 10px 20px;
+        border-radius: 8px;
         font-size: 16px;
-        border-radius: 5px;
         cursor: pointer;
         text-decoration: none;
-        margin: 20px; /* Добавил margin для разделения кнопок */
-        width: fit-content; /* Кнопки не растягиваются на всю ширину */
+        display: inline-block;
+        text-align: center;
+        transition: all 0.3s;
+        font-weight: bold;
+        flex: 1;
     }
 
-    .form-button:hover {
-        background-color: deepskyblue;
+    .btn-primary {
+        background: linear-gradient(135deg, #ff4d94 0%, #e91e63 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #ff6fa9 0%, #d63384 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(214, 51, 132, 0.3);
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #ffb6d9 0%, #ff85a2 100%);
+        color: #b3005e;
+    }
+
+    .btn-secondary:hover {
+        background: linear-gradient(135deg, #ffd1e6 0%, #ffb6d9 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 182, 217, 0.3);
+    }
+
+    .form-container:hover {
+        box-shadow: 0 8px 25px rgba(214, 51, 132, 0.15);
     }
 </style>
 
-<h1>Редактирование статьи</h1>
-{% if error %}
-    <div style="color: red;">
-        {{ error }}
-    </div>
-{% endif %}
+<div class="form-container">
+    <h1> Редактирование статьи</h1>
+    
+    {% if error %}
+        <div class="error-message">
+             {{ error }}
+        </div>
+    {% endif %}
 
-<form method="post">
-    <div>
-        <label for="title">Название статьи:</label>
-        <input type="text" name="title" id="title" value="{{ article['title'] }}" maxlength="50" class="input-field">
-    </div>
+    <form method="post">
+        <div class="form-group">
+            <label for="title">Название статьи:</label>
+            <input type="text" name="title" id="title" value="{{ article['title'] }}" maxlength="50" class="input-field" placeholder="Введите название..." required>
+        </div>
 
-    <div>
-        <label for="article_text">Текст статьи:</label>
-        <textarea name="article_text" id="article_text" class="input-field">{{ article.article_text }}</textarea>
-    </div>
+        <div class="form-group">
+            <label for="article_text">Текст статьи:</label>
+            <textarea name="article_text" id="article_text" class="input-field" placeholder="Начните писать свою статью здесь..." required>{{ article.article_text }}</textarea>
+        </div>
 
-    <div>
-        <button type="submit" class="form-button">Сохранить изменения</button>
-        <a href="{{ url_for('lab8.personal_articles') }}" class="form-button">Назад к списку статей</a>
-    </div>
-</form>
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary"> Сохранить изменения</button>
+            <a href="{{ url_for('lab8.personal_articles') }}" class="btn btn-secondary">← Назад к списку</a>
+        </div>
+    </form>
+</div>
 {% endblock %}
