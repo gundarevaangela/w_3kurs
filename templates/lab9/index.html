@@ -5,10 +5,12 @@
 {% block script %}
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+    // Обработка кликов по подаркам
     document.querySelectorAll('.gift-box').forEach(box => {
         box.addEventListener('click', async () => {
             const id = box.dataset.id;
             const isOpened = box.dataset.opened === "true";
+            const requiresAuth = box.dataset.auth === "true";
 
             if (isOpened) return;
 
@@ -21,7 +23,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await r.json();
 
             if (result.limit_exceeded) {
-                alert("Вы уже открыли 3 подарка");
+                alert("Вы уже открыли максимальное количество подарков (3)");
+                return;
+            }
+
+            if (result.auth_required) {
+                alert("🔒 " + result.message + "\n\nПожалуйста, авторизуйтесь или зарегистрируйтесь!");
+                window.location.href = '/login';
+                return;
+            }
+
+            if (result.already_opened) {
+                alert("Этот подарок уже открыт!");
                 return;
             }
 
@@ -30,6 +43,33 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // Обработка кнопки "Дед Мороз"
+    const santaButton = document.getElementById('santa-button');
+    if (santaButton) {
+        santaButton.addEventListener('click', async () => {
+            if (!confirm('🎅 Дед Мороз наполнит все коробки заново!\n\nЭто сбросит все открытые вами подарки. Продолжить?')) {
+                return;
+            }
+
+            try {
+                const r = await fetch('/lab9/reset', {
+                    method: 'POST'
+                });
+                
+                const result = await r.json();
+                
+                if (result.success) {
+                    alert(result.message);
+                    location.reload();
+                } else {
+                    alert('Ошибка: ' + result.message);
+                }
+            } catch (error) {
+                alert('Ошибка при обновлении подарков');
+            }
+        });
+    }
 });
 </script>
 <style>
@@ -55,13 +95,14 @@ document.addEventListener('DOMContentLoaded', () => {
         padding: 20px;
     }
     
-    /* Полупрозрачный слой поверх фона для текста (опционально) */
+    /* Полупрозрачный слой поверх фона */
     .content-overlay {
         background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(5px);
         border-radius: 15px;
         padding: 20px;
         margin-bottom: 20px;
+        text-align: center;
     }
     
     h1 {
@@ -79,20 +120,80 @@ document.addEventListener('DOMContentLoaded', () => {
         transform: translateX(-50%);
     }
     
-    .counter {
-        text-align: center;
-        font-size: 20px;
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
         margin: 20px 0;
-        background: rgba(255, 255, 255, 0.9);
+    }
+    
+    .auth-status {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .counter {
+        font-size: 20px;
+        background: rgba(255, 255, 255, 0.95);
         padding: 15px 25px;
         border-radius: 10px;
-        display: inline-block;
-        margin-left: 50%;
-        transform: translateX(-50%);
         border: 3px solid #ffafc5;
         color: #c2185b;
         font-weight: bold;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        min-width: 300px;
+        text-align: center;
+    }
+    
+    .auth-info {
+        font-size: 18px;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 15px 25px;
+        border-radius: 10px;
+        border: 3px solid {% if is_authenticated %}#4CAF50{% else %}#ff9800{% endif %};
+        color: {% if is_authenticated %}#2E7D32{% else %}#e65100{% endif %};
+        font-weight: bold;
+        min-width: 300px;
+        text-align: center;
+    }
+    
+    .santa-button {
+        background: linear-gradient(135deg, #ff4d4d 0%, #c2185b 100%);
+        color: white;
+        border: none;
+        padding: 15px 35px;
+        border-radius: 50px;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(194, 24, 91, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 10px;
+        min-width: 250px;
+    }
+    
+    .santa-button:hover {
+        background: linear-gradient(135deg, #ff6666 0%, #d81b60 100%);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(194, 24, 91, 0.5);
+    }
+    
+    .santa-button:disabled {
+        background: #cccccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .santa-icon {
+        font-size: 24px;
     }
     
     #gift-container {
@@ -107,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cursor: pointer;
         transition: transform 0.3s ease, opacity 0.3s ease;
         z-index: 10;
+        text-align: center;
     }
     
     .gift-box:hover {
@@ -124,6 +226,27 @@ document.addEventListener('DOMContentLoaded', () => {
         padding: 5px;
     }
     
+    .special-gift {
+        border: 4px solid gold !important;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5) !important;
+        position: relative;
+    }
+    
+    .special-gift::before {
+        content: '🌟';
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 24px;
+        z-index: 11;
+    }
+    
+    .special-gift .gift-label {
+        background: linear-gradient(135deg, #ffd700 0%, #ff9800 100%);
+        color: #8b4513;
+    }
+    
     .gift-label {
         text-align: center;
         margin-top: 5px;
@@ -131,9 +254,16 @@ document.addEventListener('DOMContentLoaded', () => {
         font-weight: bold;
         text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
         background: #c2185b;
-        padding: 3px 10px;
+        padding: 8px 15px;
         border-radius: 10px;
         font-size: 14px;
+        max-width: 150px;
+        margin: 5px auto 0;
+    }
+    
+    .lock-icon {
+        font-size: 16px;
+        margin-right: 5px;
     }
     
     .rules {
@@ -149,7 +279,18 @@ document.addEventListener('DOMContentLoaded', () => {
         display: inline-block;
         border: 3px solid #ffafc5;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        max-width: 600px;
+        max-width: 800px;
+    }
+    
+    .rules-list {
+        text-align: left;
+        margin: 15px 0;
+        padding-left: 20px;
+    }
+    
+    .rules-list li {
+        margin: 10px 0;
+        font-size: 16px;
     }
 </style>
 {% endblock %}
@@ -159,26 +300,68 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="content-overlay">
         <h1>🎄 Новогодние Поздравления 2026 🎄</h1>
         
-        <div class="counter">
-            🎁 Осталось неоткрытых подарков: 
-            <span style="font-size: 1.3em; color: #d63384;">{{ unopened_count }}</span>
+        <div class="user-info">
+            <div class="auth-status">
+                <div class="counter">
+                    🎁 Осталось неоткрытых подарков: 
+                    <span style="font-size: 1.3em; color: #d63384;">{{ unopened_count }}</span>
+                    <br>
+                    📦 Открыто вами: 
+                    <span style="font-size: 1.3em; color: #d63384;">{{ opened_count }}/3</span>
+                </div>
+                
+                <div class="auth-info">
+                    {% if is_authenticated %}
+                    ✅ Вы авторизованы как: {{ current_user.login }}
+                    <br>🔓 Доступны все 10 подарков
+                    {% else %}
+                    🔒 Вы не авторизованы
+                    <br>⚠️ Доступно только 7 обычных подарков
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if is_authenticated %}
+            <button id="santa-button" class="santa-button">
+                <span class="santa-icon">🎅</span>
+                Дед Мороз
+                <span class="santa-icon">🎁</span>
+            </button>
+            <p style="color: white; margin-top: 5px; font-size: 14px;">
+                Нажмите, чтобы наполнить все коробки заново
+            </p>
+            {% else %}
+            <div style="margin-top: 15px;">
+                <a href="/login" style="color: white; text-decoration: underline; font-size: 16px;">
+                    🔓 Войдите, чтобы открыть особые подарки и получить доступ к Дед Морозу
+                </a>
+            </div>
+            {% endif %}
         </div>
     </div>
     
     <div id="gift-container">
         {% for b in boxes %}
-        <div class="gift-box"
+        <div class="gift-box {% if b.requires_auth %}special-gift{% endif %}"
              data-id="{{ b.id }}"
              data-opened="{{ 'true' if b.is_opened else 'false' }}"
-             style="top:{{ b.pos_top }}px; left:{{ b.pos_left }}px; opacity: {{ 0.7 if b.is_opened else 1 }};">
+             data-auth="{{ 'true' if b.requires_auth else 'false' }}"
+             style="top:{{ b.pos_top }}px; left:{{ b.pos_left }}px; opacity: {{ 0.5 if b.is_opened else 1 }};">
             <img src="/static/lab9/gift_{{ b.id }}.jpg"
                  alt="Подарок {{ b.id }}"
-                 title="{{ 'Уже открыто' if b.is_opened else 'Нажмите, чтобы открыть' }}">
+                 title="{% if b.is_opened %}Уже открыто{% elif b.requires_auth %}Особый подарок (требуется авторизация){% else %}Нажмите, чтобы открыть{% endif %}"
+                 class="{% if b.requires_auth %}special-gift{% endif %}">
             <div class="gift-label">
                 {% if b.is_opened %}
                 ✓ Открыто
                 {% else %}
+                {% if b.requires_auth %}
+                <span class="lock-icon">🔒</span>
+                {% endif %}
                 Подарок {{ b.id }}
+                {% if b.requires_auth %}
+                <br><small>(Особый)</small>
+                {% endif %}
                 {% endif %}
             </div>
         </div>
@@ -187,9 +370,16 @@ document.addEventListener('DOMContentLoaded', () => {
     
     <div class="rules">
         <div class="rules-box">
-            <p style="font-size: 18px; color: #c2185b; margin: 0;">
-                🎅 <strong>Правила игры:</strong> Вы можете открыть только 3 подарка! 
-                Выбирайте самые красивые коробки! 🎁
+            <h2 style="color: #c2185b; margin-top: 0;">🎅 Правила игры:</h2>
+            <ul class="rules-list">
+                <li><strong>Каждый пользователь может открыть только 3 подарка</strong></li>
+                <li><strong>7 обычных подарков</strong> доступны всем пользователям</li>
+                <li><strong>3 особых подарка (с золотой рамкой)</strong> доступны только авторизованным пользователям</li>
+                <li><strong>Авторизованные пользователи</strong> видят кнопку "Дед Мороз", которая наполняет все коробки заново</li>
+                <li>Выбирайте подарки внимательно - у вас всего 3 попытки!</li>
+            </ul>
+            <p style="font-size: 18px; color: #c2185b; margin: 20px 0 0; font-weight: bold;">
+                Счастливого Нового 2026 года! 🎄✨
             </p>
         </div>
     </div>

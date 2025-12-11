@@ -12,7 +12,6 @@
         font-family: 'Arial', sans-serif;
     }
     
-    /* Фон на всю страницу */
     .congratulation-wrapper {
         width: 100%;
         min-height: 100vh;
@@ -50,6 +49,22 @@
         border: 3px solid #ffc2d6;
     }
     
+    .gift-type {
+        font-size: 1.2em;
+        color: #d63384;
+        margin: 10px 0 20px;
+        font-weight: bold;
+    }
+    
+    .special-badge {
+        background: linear-gradient(135deg, #ffd700 0%, #ff9800 100%);
+        color: #8b4513;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.9em;
+        margin-left: 10px;
+    }
+    
     .congratulation-image {
         max-width: 100%;
         max-height: 450px;
@@ -74,9 +89,20 @@
         box-shadow: 0 5px 15px rgba(214, 51, 132, 0.1);
     }
     
+    .progress-info {
+        margin: 25px 0;
+        font-size: 18px;
+        color: #666;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 15px;
+        border-radius: 10px;
+        display: inline-block;
+        border: 2px solid #ffafc5;
+    }
+    
     .back-button {
         display: inline-block;
-        margin-top: 30px;
+        margin-top: 20px;
         padding: 18px 45px;
         background: linear-gradient(135deg, #ff4d94 0%, #d63384 100%);
         color: white;
@@ -95,19 +121,16 @@
         box-shadow: 0 10px 25px rgba(214, 51, 132, 0.5);
     }
     
-    .counter-info {
-        margin-top: 25px;
-        font-size: 18px;
-        color: #666;
-        background: rgba(255, 255, 255, 0.8);
-        padding: 15px;
-        border-radius: 10px;
-        display: inline-block;
-    }
-    
     .new-year-decoration {
         font-size: 40px;
         margin: 0 10px;
+    }
+    
+    .gift-number {
+        font-size: 24px;
+        color: #c2185b;
+        font-weight: bold;
+        margin-top: 10px;
     }
 </style>
 
@@ -115,8 +138,14 @@
     <div class="congratulation-content">
         <div class="congratulation-header">
             <span class="new-year-decoration">🎁</span>
-            Новогодний Подарок!
+            Новогодний Подарок {{ box_id }}!
             <span class="new-year-decoration">🎄</span>
+        </div>
+        
+        <div class="gift-type">
+            {% if box_id >= 8 %}
+            <span class="special-badge">🌟 ОСОБЫЙ ПОДАРОК</span>
+            {% endif %}
         </div>
         
         <div>
@@ -129,15 +158,21 @@
             {{ message }}
         </div>
         
+        <div class="progress-info">
+            <strong>Ваш прогресс:</strong><br>
+            📦 Открыто подарков: <strong>{{ opened_count }}/3</strong><br>
+            🎁 Осталось открыть: <strong>{{ remaining }}</strong>
+            {% if not is_authenticated and box_id < 8 %}
+            <br><br>
+            🔓 <a href="/login" style="color: #d63384; text-decoration: underline;">
+                Авторизуйтесь, чтобы открыть особые подарки!
+            </a>
+            {% endif %}
+        </div>
+        
         <a href="/lab9/" class="back-button">
             ← Вернуться к подаркам
         </a>
-        
-        <div class="counter-info">
-            Вы открыли подарок! 
-            <strong>{{ session.get('opened_count', 0) }}/3</strong>
-            осталось открыть: <strong>{{ 3 - session.get('opened_count', 0) }}</strong>
-        </div>
     </div>
 </div>
 {% endblock %}
