@@ -2,8 +2,196 @@
 
 {% block lab %}Лабораторная работа 9{% endblock %}
 
-{% block script %}{% endblock %}
+{% block script %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.gift-box').forEach(box => {
+        box.addEventListener('click', async () => {
+            const id = box.dataset.id;
+            const isOpened = box.dataset.opened === "true";
+
+            if (isOpened) return;
+
+            const r = await fetch('/lab9/open_box', {
+                method: 'POST',
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({box_id: id})
+            });
+
+            const result = await r.json();
+
+            if (result.limit_exceeded) {
+                alert("Вы уже открыли 3 подарка");
+                return;
+            }
+
+            if (result.success) {
+                window.location = result.redirect_url;
+            }
+        });
+    });
+});
+</script>
+<style>
+    /* Фон на всю страницу */
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-family: 'Arial', sans-serif;
+    }
+    
+    /* Основной контейнер с фоном */
+    .content-wrapper {
+        width: 100%;
+        min-height: 100vh;
+        background-image: url('/static/lab9/bg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        position: relative;
+        padding: 20px;
+    }
+    
+    /* Полупрозрачный слой поверх фона для текста (опционально) */
+    .content-overlay {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    h1 {
+        text-align: center;
+        color: #fff;
+        margin-top: 0;
+        padding-top: 20px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        font-size: 2.5em;
+        background: rgba(194, 24, 91, 0.7);
+        padding: 15px;
+        border-radius: 10px;
+        display: inline-block;
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .counter {
+        text-align: center;
+        font-size: 20px;
+        margin: 20px 0;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 15px 25px;
+        border-radius: 10px;
+        display: inline-block;
+        margin-left: 50%;
+        transform: translateX(-50%);
+        border: 3px solid #ffafc5;
+        color: #c2185b;
+        font-weight: bold;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    #gift-container {
+        position: relative;
+        width: 100%;
+        min-height: 600px;
+        margin-top: 30px;
+    }
+    
+    .gift-box {
+        position: absolute;
+        cursor: pointer;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        z-index: 10;
+    }
+    
+    .gift-box:hover {
+        transform: scale(1.15);
+        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+    }
+    
+    .gift-box img {
+        max-width: 150px;
+        max-height: 150px;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        border: 4px solid white;
+        background: white;
+        padding: 5px;
+    }
+    
+    .gift-label {
+        text-align: center;
+        margin-top: 5px;
+        color: white;
+        font-weight: bold;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+        background: #c2185b;
+        padding: 3px 10px;
+        border-radius: 10px;
+        font-size: 14px;
+    }
+    
+    .rules {
+        text-align: center;
+        margin-top: 50px;
+        padding: 20px;
+    }
+    
+    .rules-box {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 20px;
+        border-radius: 15px;
+        display: inline-block;
+        border: 3px solid #ffafc5;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        max-width: 600px;
+    }
+</style>
+{% endblock %}
 
 {% block main %}
-    <h1>Поздравления</h1>
+<div class="content-wrapper">
+    <div class="content-overlay">
+        <h1>🎄 Новогодние Поздравления 2026 🎄</h1>
+        
+        <div class="counter">
+            🎁 Осталось неоткрытых подарков: 
+            <span style="font-size: 1.3em; color: #d63384;">{{ unopened_count }}</span>
+        </div>
+    </div>
+    
+    <div id="gift-container">
+        {% for b in boxes %}
+        <div class="gift-box"
+             data-id="{{ b.id }}"
+             data-opened="{{ 'true' if b.is_opened else 'false' }}"
+             style="top:{{ b.pos_top }}px; left:{{ b.pos_left }}px; opacity: {{ 0.7 if b.is_opened else 1 }};">
+            <img src="/static/lab9/gift_{{ b.id }}.jpg"
+                 alt="Подарок {{ b.id }}"
+                 title="{{ 'Уже открыто' if b.is_opened else 'Нажмите, чтобы открыть' }}">
+            <div class="gift-label">
+                {% if b.is_opened %}
+                ✓ Открыто
+                {% else %}
+                Подарок {{ b.id }}
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="rules">
+        <div class="rules-box">
+            <p style="font-size: 18px; color: #c2185b; margin: 0;">
+                🎅 <strong>Правила игры:</strong> Вы можете открыть только 3 подарка! 
+                Выбирайте самые красивые коробки! 🎁
+            </p>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block lab %}Поздравление{% endblock %}
+
+{% block main %}
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-family: 'Arial', sans-serif;
+    }
+    
+    /* Фон на всю страницу */
+    .congratulation-wrapper {
+        width: 100%;
+        min-height: 100vh;
+        background-image: url('/static/lab9/bg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+    
+    .congratulation-content {
+        max-width: 900px;
+        width: 90%;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 40px;
+        border-radius: 25px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+        border: 5px solid #ffafc5;
+        backdrop-filter: blur(10px);
+    }
+    
+    .congratulation-header {
+        color: #c2185b;
+        font-size: 2.8em;
+        margin-bottom: 30px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(135deg, #ffe4ec 0%, #ffd1dc 100%);
+        padding: 20px;
+        border-radius: 15px;
+        border: 3px solid #ffc2d6;
+    }
+    
+    .congratulation-image {
+        max-width: 100%;
+        max-height: 450px;
+        border-radius: 20px;
+        margin: 25px 0;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        border: 5px solid #ffd6e7;
+        background: white;
+        padding: 10px;
+    }
+    
+    .message-box {
+        background: linear-gradient(135deg, #fff0f5 0%, #ffe4e6 100%);
+        padding: 30px;
+        border-radius: 20px;
+        margin: 30px 0;
+        border: 3px solid #ffc2d6;
+        font-size: 22px;
+        line-height: 1.7;
+        color: #880e4f;
+        font-weight: 500;
+        box-shadow: 0 5px 15px rgba(214, 51, 132, 0.1);
+    }
+    
+    .back-button {
+        display: inline-block;
+        margin-top: 30px;
+        padding: 18px 45px;
+        background: linear-gradient(135deg, #ff4d94 0%, #d63384 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 35px;
+        font-size: 20px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(214, 51, 132, 0.4);
+        border: 3px solid white;
+    }
+    
+    .back-button:hover {
+        background: linear-gradient(135deg, #ff6fa9 0%, #e91e63 100%);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(214, 51, 132, 0.5);
+    }
+    
+    .counter-info {
+        margin-top: 25px;
+        font-size: 18px;
+        color: #666;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 15px;
+        border-radius: 10px;
+        display: inline-block;
+    }
+    
+    .new-year-decoration {
+        font-size: 40px;
+        margin: 0 10px;
+    }
+</style>
+
+<div class="congratulation-wrapper">
+    <div class="congratulation-content">
+        <div class="congratulation-header">
+            <span class="new-year-decoration">🎁</span>
+            Новогодний Подарок!
+            <span class="new-year-decoration">🎄</span>
+        </div>
+        
+        <div>
+            <img src="{{ img_path }}" 
+                 class="congratulation-image" 
+                 alt="Новогоднее поздравление">
+        </div>
+        
+        <div class="message-box">
+            {{ message }}
+        </div>
+        
+        <a href="/lab9/" class="back-button">
+            ← Вернуться к подаркам
+        </a>
+        
+        <div class="counter-info">
+            Вы открыли подарок! 
+            <strong>{{ session.get('opened_count', 0) }}/3</strong>
+            осталось открыть: <strong>{{ 3 - session.get('opened_count', 0) }}</strong>
+        </div>
+    </div>
+</div>
+{% endblock %}
