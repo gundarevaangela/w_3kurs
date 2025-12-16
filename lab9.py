@@ -115,6 +115,7 @@ def congratulation(box_id):
 @lab9.route('/lab9/init')
 def init_boxes():
     try:
+        db.create_all()
         # Важно: сначала удаляем записи в user_opened_gifts, потом в gift_box
         user_opened_gifts.query.delete()  # Удаляем сначала дочерние записи
         gift_box.query.delete()           # Потом родительские записи
@@ -169,6 +170,7 @@ def init_boxes():
 @login_required
 def reset_boxes():
     try:
+        db.create_all()
         # Сбрасываем статус всех коробок
         boxes = gift_box.query.all()
         for box in boxes:
