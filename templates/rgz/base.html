@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Система Инициатив - RGZ{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fff5f7 0%, #ffeef2 100%);
+            color: #6d2a4f;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff66b2 0%, #ff99cc 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 15px rgba(255, 102, 178, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-weight: 500;
+        }
+        
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 102, 178, 0.3);
+        }
+        
+        .student-info {
+            background: linear-gradient(135deg, #ffccdd 0%, #ffb3d9 100%);
+            padding: 12px 0;
+            text-align: center;
+            font-size: 0.95rem;
+            color: #8a2d5e;
+            border-bottom: 2px solid #ff99cc;
+            font-weight: 500;
+        }
+        
+        .student-info strong {
+            color: #d63384;
+            font-weight: 600;
+        }
+        
+        .flash-messages {
+            max-width: 900px;
+            margin: 25px auto;
+        }
+        
+        .alert {
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            font-weight: 500;
+        }
+        
+        .alert-error {
+            background: linear-gradient(135deg, #ffcccc 0%, #ff9999 100%);
+            color: #b30000;
+            border-left: 5px solid #ff6666;
+        }
+        
+        .alert-success {
+            background: linear-gradient(135deg, #ccffcc 0%, #99ff99 100%);
+            color: #006600;
+            border-left: 5px solid #66ff66;
+        }
+        
+        .main-content {
+            min-height: 75vh;
+            padding: 30px 0;
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #ff66b2 0%, #ff3385 100%);
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+            border-top: 3px solid #ff99cc;
+        }
+        
+        .footer p {
+            margin: 5px 0;
+        }
+        
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .main-content > .container {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Информация о студенте -->
+    <div class="student-info">
+        <strong>Студент:</strong> Gundareva Angela | 
+        <strong>Группа:</strong> ФБИ-31
+    </div>
+    
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="{{ url_for('rgz.main') }}" class="logo">Система Инициатив</a>
+                <nav class="nav">
+                    <a href="{{ url_for('rgz.main') }}">Главная</a>
+                    
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('rgz.create') }}">Новая инициатива</a>
+                        
+                        {% if current_user.is_admin %}
+                            <a href="{{ url_for('rgz.admin_users') }}">Админ-панель</a>
+                        {% endif %}
+                        
+                        <a href="/lab8/logout">Выход</a>
+                    {% else %}
+                        <a href="/lab8/login">Вход</a>
+                        <a href="/lab8/register/">Регистрация</a>
+                    {% endif %}
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Flash сообщения -->
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'error' if category == 'error' else 'success' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    
+    <main class="main-content">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; Gundareva Angela, ФБИ-31, 3 курс, 2025</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{% extends "rgz/base.html" %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto; padding: 20px;">
+    <h1 style="color: #d63384; margin-bottom: 25px;">Управление инициативами</h1>
+    
+    <div style="margin-bottom: 25px; padding: 15px; background: #fff9fb; border-radius: 10px; border: 2px solid #ffccdd;">
+        <p style="color: #8a2d5e; margin: 0;">
+            <strong>Администратор:</strong> Вы можете удалять любые инициативы.
+        </p>
+    </div>
+    
+    {% if initiatives %}
+        {% for initiative in initiatives %}
+            <div style="background: white; border: 2px solid {% if initiative.is_active %}#ffccdd{% else %}#cccccc{% endif %}; 
+                 border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                    <div style="flex: 1;">
+                        <h3 style="margin: 0; color: #d63384;">
+                            {{ initiative.title }}
+                            {% if not initiative.is_active %}
+                                <span style="font-size: 0.8em; color: #999; font-weight: normal;">(удалена)</span>
+                            {% endif %}
+                        </h3>
+                        <p style="color: #cc6699; margin: 5px 0; font-size: 0.9em;">
+                            Автор: {{ initiative.author.login }} | 
+                            {{ initiative.created_at.strftime('%d.%m.%Y %H:%M') }} |
+                            Оценка: <span style="color: {% if initiative.score >= 0 %}#d63384{% else %}#ff6666{% endif %}; 
+                                       font-weight: 500;">{{ initiative.score }}</span>
+                        </p>
+                        <p style="color: #8a2d5e; margin: 10px 0; line-height: 1.4;">
+                            {{ initiative.content[:150] }}{% if initiative.content|length > 150 %}...{% endif %}
+                        </p>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin-left: 20px;">
+                        <a href="{{ url_for('rgz.view_initiative', id=initiative.id) }}" 
+                           style="padding: 6px 12px; background: #ff99cc; color: white; 
+                                  text-decoration: none; border-radius: 5px; font-size: 0.9em; text-align: center;">
+                            Просмотр
+                        </a>
+                        
+                        {% if initiative.is_active %}
+                            <form method="POST" action="{{ url_for('rgz.admin_delete_initiative', id=initiative.id) }}" 
+                                  onsubmit="return confirm('Удалить инициативу «{{ initiative.title }}»?')"
+                                  style="margin: 0;">
+                                <button type="submit" style="padding: 6px 12px; 
+                                        background: #ffcc66; color: #8a2d5e; border: none; 
+                                        border-radius: 5px; cursor: pointer; font-size: 0.9em; width: 100%;">
+                                    Удалить
+                                </button>
+                            </form>
+                        {% else %}
+                            <span style="color: #999; font-size: 0.9em; text-align: center;">Удалена</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div style="text-align: center; margin: 50px 0; padding: 40px; 
+             background: white; border-radius: 15px; border: 2px dashed #ffccdd;">
+            <p style="color: #cc6699; font-size: 1.1em;">
+                Инициатив пока нет.
+            </p>
+        </div>
+    {% endif %}
+    
+    <div style="margin-top: 30px; display: flex; gap: 15px;">
+        <a href="{{ url_for('rgz.admin_users') }}" style="padding: 10px 20px; 
+           background: #ff99cc; color: white; text-decoration: none; border-radius: 5px; font-weight: 500;">
+            Управление пользователями
+        </a>
+        
+        <a href="/rgz/" style="padding: 10px 20px; 
+           background: white; color: #ff66b2; text-decoration: none; border-radius: 5px; 
+           border: 2px solid #ff99cc; font-weight: 500;">
+            На главную
+        </a>
+    </div>
+</div>
+{% endblock %}
